@@ -1,0 +1,6 @@
+# ninja log v6
+17	675	7518435066088223	build.ninja	98fe2b08682d9a50
+160	429	7518435068683962	CMakeFiles/c__chess.dir/Pawn.cpp.obj	475776f6015e8b61
+3	1091	7518466388087787	CMakeFiles/c__chess.dir/Board.cpp.obj	ec9269e7ef512422
+40	1100	7518466388468997	CMakeFiles/c__chess.dir/Main.cpp.obj	1510640c557db5eb
+1100	2799	7518466399067513	c__chess.exe	b2d7709854ee7932
