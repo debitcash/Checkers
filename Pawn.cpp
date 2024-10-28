@@ -1,9 +1,9 @@
-class Pond{
+class Pawn{
     private:
         //
         bool isBlack;
     public:
-        Pond(bool newIsBlack): isBlack(newIsBlack){}
+        Pawn(bool newIsBlack): isBlack(newIsBlack){}
         
         bool isBlackCheck()
         {

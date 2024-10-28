@@ -1,17 +1,17 @@
 #include <iostream>
-#include "Pond.cpp"
+#include "Pawn.cpp"
 
 class Board{
     private:
         // declare the board and initialize the board values
-        Pond* board[8][8] = {
+        Pawn* board[8][8] = {
             {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr}, // black pieces
-            {new Pond(true), new Pond(true), new Pond(true), new Pond(true), new Pond(true), new Pond(true), new Pond(true), new Pond(true)},
+            {new Pawn(true), new Pawn(true), new Pawn(true), new Pawn(true), new Pawn(true), new Pawn(true), new Pawn(true), new Pawn(true)},
             {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
             {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
             {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
             {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
-            {new Pond(false), new Pond(false), new Pond(false), new Pond(false), new Pond(false), new Pond(false), new Pond(false), new Pond(false)},
+            {new Pawn(false), new Pawn(false), new Pawn(false), new Pawn(false), new Pawn(false), new Pawn(false), new Pawn(false), new Pawn(false)},
             {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr}}; // white pieces
         
     public:
