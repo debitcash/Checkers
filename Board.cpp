@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Pawn.cpp"
+//#include <typeinfo>
 
 class Board{
     private:
@@ -31,8 +32,32 @@ class Board{
                 return;
             }
             
+            /* Trying to figure out how to enable diagonal moves for pond here
+             *  Piece& piece = *board[row1][column1];
+             * 
+             *  if (piece == typeid(Pawn))
+             *  {
+             *      if (piece.isBlack == true)
+             *      {
+             *          check caption options below the piece for diagonal move;
+             *      }
+             * 
+             *      else
+             *      {   
+             *          check caption options above the piece for diagonal move;
+             *      }
+             *  }
+             * 
+             *  else
+             *  {
+             *      return piece.isValidMove();
+             *  }
+             * 
+             * */
+            
             // assign the piece to new location and empty the previous location
             board[row2][column2] = board[row1][column1];
+            // delete the object here?
             board[row1][column1] = nullptr;
         }
         
@@ -56,5 +81,4 @@ class Board{
                 std::cout << std::endl;
             }
         }
-        
 };

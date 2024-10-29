@@ -6,6 +6,7 @@ int main(){
     Board board;
     
     // start with white(white - odd, black - even)
+    // white at bottom black at top
     int turn = 1; 
     
     board.display();
