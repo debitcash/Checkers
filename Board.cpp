@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Pawn.cpp"
+//#include <typeinfo>
 
 class Board{
     private:
@@ -31,8 +32,44 @@ class Board{
                 return;
             }
             
+            /* Trying to figure out how to enable diagonal moves for pond in this comment section
+             *  Piece& piece = *board[row1][column1];
+             * 
+             *  if (piece == typeid(Pawn))
+             *  {
+             *      Pawn& pawn = piece;
+             *      
+             *      if (piece.isBlack == true )
+             *      {
+             *          check caption options below the piece for diagonal move;
+             *          
+             *          bool whiteOnLeft = !(Board[row + 1][column - 1] -> isBlack); // pay attention to out of board locations here=> ((column -1 > 0) && (row + 1 < 8)) ? !(Board[row + 1][column - 1] -> isBlack) : false;
+            *          bool whiteOnRight = !(Board[row + 1][column + 1] -> isBlack);
+             *          
+             *          pawn.isValidMove(row1, column1, row2, column2, whiteOnLeft, whiteOnRight);
+             *      }
+             * 
+             *      else
+             *      {   
+             *          check caption options above the piece for diagonal move;
+             * 
+             *          bool blackOnLeft = !(Board[row - 1][column - 1] -> isBlack);
+             *          bool blackOnRight = !(Board[row - 1][column + 1] -> isBlack);
+             *          
+             *          pawn.isValidMove(row1, column1, row2, column2, blackOnLeft, blackOnRight);
+             *      }
+             *  }
+             * 
+             *  else
+             *  {
+             *      return piece.isValidMove();
+             *  }
+             * 
+             * */
+            
             // assign the piece to new location and empty the previous location
             board[row2][column2] = board[row1][column1];
+            // delete the object here?
             board[row1][column1] = nullptr;
         }
         
@@ -56,5 +93,4 @@ class Board{
                 std::cout << std::endl;
             }
         }
-        
 };
