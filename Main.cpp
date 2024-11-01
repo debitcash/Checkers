@@ -10,7 +10,7 @@ int main(){
     int turn = 1; 
     
     board.display();
-    board.move(6, 0, 5, 0, turn);
+    board.move(1, 0, 2, 0, turn);
     
     std::cout << std::endl;
     
