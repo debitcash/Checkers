@@ -6,4 +6,5 @@ set(CMAKE_CXX_STANDARD 14)
 add_executable(c__chess
     Board.cpp
     Main.cpp
-        Pawn.cpp)
+        Pawn.cpp
+        Queen.h)
