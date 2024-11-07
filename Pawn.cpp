@@ -1,31 +1,42 @@
-#include "Piece.cpp"
+#include "Pawn.h"
+#include <iostream>
+//This is the pawn implementation class. 
 
-class Pawn : public Piece{
-    private:
 
-        bool isBlack;
-        int originRow;
-        int originCol;
+    //Old implementation of the constructors
 
-    public:
+       /* Pawn(bool newIsBlack): isBlack(newIsBlack){}
         Pawn(bool newIsBlack, int newRow, int newCol) {
             isBlack = newIsBlack;
             originRow = newRow;
             originCol = newCol;
-        }
+        }*/
         
-        bool isBlackCheck()
+        //It will already inherit this from the piece class so it is no longer needed here.
+        /*bool isBlackCheck()
         {
             return isBlack;
-        }
-        
+        }*/
+
+       //New Constructors
+
+       //Default 
+       Pawn::Pawn() : Piece(), originRow(0), originCol(0) {}
+
+       //Parameterized 
+       Pawn::Pawn(bool newColour, bool newStatus, int newRow, int newCol) : Piece(newColour, newStatus), originRow(newRow),originCol(newCol) {}
+
+
+
+
         //check if move is valid(move forward only, can move in diagonal if capturing opposing color pieces)
-        bool isValidMove(int destRow, int destCol) {
+           bool Pawn::isValidMove(int destRow, int destCol) {
             //single space move
             if(originRow + 1 == destRow && originCol == destCol) {
                 return true;
             }
-
+            
+            
             //double space move (only valid from starting position)
             if(originRow == 2){ //if the pawn is in the starting row
                 if(originRow + 2 == destRow && originCol == destCol) {
@@ -37,12 +48,11 @@ class Pawn : public Piece{
             if((originRow + 1 == destRow) && ((originCol + 1 == destCol)|| (originCol - 1 == destCol))) {
                 return true;
             }
-
+            
             return false;
+        }
 
-        }//end validMove
-
-        void move(int destRow, int destCol, Piece* piece, Pawn* board[8][8]) {
+        void Pawn::move(int destRow, int destCol, Piece* piece, Piece* board[8][8]) {
             // assign the piece to new location and empty the previous location
             board[destRow][destCol] = board[originRow][originCol];
             // delete the object here?
@@ -51,4 +61,9 @@ class Pawn : public Piece{
             originRow = destRow;
             originCol = destCol;
         }
-};
+
+        //Pawn class's destructor
+        Pawn::~Pawn()
+        {
+            std::cout << "Pawn has been captured" << std::endl;
+        }
