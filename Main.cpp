@@ -16,19 +16,7 @@ int main(){
     std::cout << std::endl;
     
     board.display();
-    
-    board.invertBoard();
-    
-    std::cout << std::endl;
-    std::cout << std::endl;
-    
-    board.display();
-    
-    std::cout << std::endl;
-    std::cout << std::endl;
-    board.invertBoard();
-    
-    board.display();
+
     
     return 0;
 }

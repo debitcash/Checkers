@@ -12,7 +12,7 @@ class Board{
         //(CHANGE: Jaisung) I have added that the board is now of a piece class, so it should take all of them.
         Piece* board[8][8] = {
             {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr}, // white pieces
-            {new Pawn(false,false, 1, 0), new Pawn(false,false, 1,1), new Pawn(false,false, 1,2),
+            {new Pawn(false,false, 1, 0), new Pawn(false, false, 1, 1), new Pawn(false,false, 1,2),
                 new Pawn(false,false,1,3), new Pawn(false,false, 1,4), new Pawn(false,false,1,5),
                 new Pawn(false,false, 1,6), new Pawn(false, false, 1,7)},
             {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
@@ -43,11 +43,16 @@ class Board{
             if(piece->isBlackCheck()) {
                 //invert the orign and dest rows/cols
                 invertBoard();
+                valid = piece->isValidMove(7 - destRow, 7 - destCol, board);
             }
             
-
-            valid = piece->isValidMove(7 - destRow, 7 - destCol);
-
+            else
+            {
+            	valid = piece->isValidMove(destRow, destCol, board);
+			}
+            
+            //MOVE MADE HERE
+			
             if(piece->isBlackCheck()) {
                 //revert the origin and dest rows/cols
                 invertBoard();
@@ -57,12 +62,12 @@ class Board{
             if(valid == true) {
                 piece->move(destRow, destCol, board[destRow][destCol], board);
                 turn++;
-            }
+            }/*
             else if () //This would be the piece collision case 
             {
                 
             }
-            else if () //This would be the king is checked case.
+            else if () //This would be the king is checked case.*/
             else
                 std::cout << "That was not a valid move, try again." << std::endl;
 

@@ -11,7 +11,7 @@ class Pawn : public Piece
 
     public:
     //Overloaded function to check whether it is a valid move or not.
-    bool isValidMove(int, int);
+    bool isValidMove(int, int, Piece* board[8][8]);
     //Default constructor
     Pawn();
     //Parameterized constructor

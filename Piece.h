@@ -33,7 +33,7 @@ class Piece
 
         //using a "pure virtual function" to be later overrided by its childern class due to the many 
         //different usages of piece movement. Since it is pure it  makes this an abstract class.
-        virtual bool isValidMove(int, int) = 0;
+        virtual bool isValidMove(int, int, Piece* board[8][8]) = 0;
 
         //This is another "pure virtual function" that will be overloaded by the derived classes 
         virtual void move(int, int, Piece*, Piece* board[8][8]) = 0;
