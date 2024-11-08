@@ -36,7 +36,7 @@ class Piece
         virtual bool isValidMove(int, int) = 0;
 
         //This is another "pure virtual function" that will be overloaded by the derived classes 
-        virtual void move(int, int, Piece*, Piece* board[8][8]) = 0;
+        //virtual void move(int, int, Piece*, Piece* board[8][8]) = 0;
         
         //Destructor, is a virtual so that it can be overloaded by the piece class when they are destroyed so we can write out the piece has been captuared
         virtual ~Piece();

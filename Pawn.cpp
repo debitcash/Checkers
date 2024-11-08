@@ -1,5 +1,4 @@
 #include "Pawn.h"
-#include "Piece.cpp"
 #include <iostream>
 //This is the pawn implementation class. 
 
@@ -45,31 +44,34 @@
                 }
             }
 
-            //There is checking whether there is a piece or not. So if it is a nullptr(no piece), then you will not be able make the move. 
-            if(board[destRow][destCol] != nullptr)
-            {
 
             //diagonal capture move
             if((originRow + 1 == destRow) && ((originCol + 1 == destCol)|| (originCol - 1 == destCol))) {
                 return true;
             }
 
-            }
             
             return false;
         }
 
-        void Pawn::move(int destRow, int destCol, Piece* piece, Piece* board[8][8]) {
+       /* void Pawn::move(int destRow, int destCol, Piece* piece, Piece* board[8][8]) {
 
             //Capture logic
-            if(board[destRow][destCol] != nullptr)
+            //Should check whether a piece exists or not, which it won't if it equals a nullptr and also checking whether the isBlackCheck do not match to determine if they are both different colours. 
+            if(board[destRow][destCol] != nullptr && piece->isBlackCheck() != board[destRow][destCol]->isBlackCheck())
+            //have not implemented the king check yet. 
             {
                 //deleting the old piece, it should call the destructor so the destructor will call it being "captuared"
-                delete[destRow][destCol];
+                delete board[destRow][destCol];
                 //assign the piece to the new location 
                 board[destRow][destCol] = board[originRow][originCol];
 
-                board[originRow][originCol];
+
+                // assign the original area to null here.
+                board[originRow][originCol] = nullptr;
+
+                originRow = destRow;
+                originCol = destCol;
             }
             else
             {
@@ -84,7 +86,7 @@
             }     
             
             
-           }
+           }*/
 
         //Pawn class's destructor
         Pawn::~Pawn()

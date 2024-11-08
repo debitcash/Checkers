@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Pawn.cpp"
+#include "Pawn.h"
 //#include <typeinfo>
 //#include "Piece.cpp"
 //#include <typeinfo>
@@ -26,7 +26,7 @@ class Board{
         
 
     public:
-        void move(int originRow, int originCol, int destRow, int destCol, int& turn)
+        /*void move(int originRow, int originCol, int destRow, int destCol, int& turn)
         {
             bool valid;
 
@@ -45,7 +45,7 @@ class Board{
                 invertBoard();
             }
             
-
+            //Inversion to destination. 
             valid = piece->isValidMove(7 - destRow, 7 - destCol);
 
             if(piece->isBlackCheck()) {
@@ -58,11 +58,6 @@ class Board{
                 piece->move(destRow, destCol, board[destRow][destCol], board);
                 turn++;
             }
-            else if () //This would be the piece collision case 
-            {
-                
-            }
-            else if () //This would be the king is checked case.
             else
                 std::cout << "That was not a valid move, try again." << std::endl;
 
@@ -90,7 +85,74 @@ class Board{
             // board[destRow][destCol] = board[originRow][originCol];
             // // delete the object here?
             // board[originRow][originCol] = nullptr;
+        //}
+        
+        //Just testing a new move that maybe the board could check versues making each piece check itself 
+        //Going back to the idea that each class should only contain its own logic not the whole board logic. 
+        void newMove(int originRow, int originCol, int destRow, int destCol, int& turn)
+        {
+            //bool valid; 
+            //Allowing the chosen "Piece to be put at the origin"
+            Piece* chosenPiece = board[originRow][originCol];
+            
+           // Pawn* chosenPiece = dynamic_cast<Pawn*>(board[originRow][originCol]);
+
+            
+            
+            //if(chosenPiece->isBlackCheck()) {
+                //invert the orign and dest rows/cols
+            //    invertBoard();
+           // }
+            
+            //Inversion to destination. 
+            //valid = chosenPiece->isValidMove(7 - destRow, 7 - destCol);
+
+            //if(chosenPiece->isBlackCheck()) {
+                //revert the origin and dest rows/cols
+              //  invertBoard();
+           // }
+            
+            //The idea behind this move function is that the board will actually move and think about the other pieces on the board. 
+            //The pieces will just provide the logic of what they know, this will allow less coupling with other pieces.
+            if(chosenPiece->isValidMove(destRow,destCol) == true)
+            {
+                //This is going to be the capture logic when the board "senses" another piece is on the destination point
+                if(board[destRow][destCol] != nullptr && chosenPiece->isBlackCheck() != board[destRow][destCol] -> isBlackCheck())
+                {
+                    //Delete the old piece, capturing it. It should call the destructor and that will allow it to message that the piece is destroyed.
+                    delete board[destRow][destCol];
+                    
+                    //assign the piece to the new location 
+                    board[destRow][destCol] = board[originRow][originCol];
+                    
+                    // assign the original area to null here.
+                    board[originRow][originCol] = nullptr;
+
+                    originRow = destRow;
+                    originCol = destCol;
+                }
+                
+                //this is now going to be the case where the board place is empty
+                else if (board[destRow][destCol] == nullptr)
+                {
+                    // assign the piece to new location and empty the previous location
+                    board[destRow][destCol] = board[originRow][originCol];
+                    // delete the object here?
+                    board[originRow][originCol] = nullptr;
+
+                    originRow = destRow;
+                    originCol = destCol;
+                }
+                
+            }
+            else
+            {
+                std::cout << "This move isn't valid, please try again.";
+            }
+            
+            
         }
+        
         
         void invertBoard()
         {
@@ -133,10 +195,5 @@ class Board{
             }
         }
 
-        //This function checks the baord 
-        void checkBoard()
-        {
-
-        }
-
 };
+
