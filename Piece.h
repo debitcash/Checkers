@@ -27,7 +27,6 @@ class Piece
         //To set when the piece is captuared or not
         void setCapture(bool);
 
-
         //To set whether the piece is black or not 
         void setBlack(bool);
 
@@ -38,7 +37,7 @@ class Piece
 
         //This is another "pure virtual function" that will be overloaded by the derived classes 
         virtual void move(int, int, Piece*, Piece* board[8][8]) = 0;
-
+        
         //Destructor, is a virtual so that it can be overloaded by the piece class when they are destroyed so we can write out the piece has been captuared
         virtual ~Piece();
 

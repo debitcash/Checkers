@@ -44,15 +44,34 @@
                 }
             }
 
+            //There is checking whether there is a piece or not. So if it is a nullptr(no piece), then you will not be able make the move. 
+            if(board[destRow][destCol] != nullptr)
+            {
+
             //diagonal capture move
             if((originRow + 1 == destRow) && ((originCol + 1 == destCol)|| (originCol - 1 == destCol))) {
                 return true;
+            }
+
             }
             
             return false;
         }
 
         void Pawn::move(int destRow, int destCol, Piece* piece, Piece* board[8][8]) {
+
+            //Capture logic
+            if(board[destRow][destCol] != nullptr)
+            {
+                //deleting the old piece, it should call the destructor so the destructor will call it being "captuared"
+                delete[destRow][destCol];
+                //assign the piece to the new location 
+                board[destRow][destCol] = board[originRow][originCol];
+
+                board[originRow][originCol];
+            }
+            else
+            {
             // assign the piece to new location and empty the previous location
             board[destRow][destCol] = board[originRow][originCol];
             // delete the object here?
@@ -60,7 +79,11 @@
 
             originRow = destRow;
             originCol = destCol;
-        }
+
+            }     
+            
+            
+           }
 
         //Pawn class's destructor
         Pawn::~Pawn()

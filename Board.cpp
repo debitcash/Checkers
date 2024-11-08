@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Pawn.h"
+#include "Pawn.cpp"
 //#include <typeinfo>
 //#include "Piece.cpp"
 //#include <typeinfo>
@@ -56,6 +56,11 @@ class Board{
                 piece->move(destRow, destCol, board[destRow][destCol], board);
                 turn++;
             }
+            else if () //This would be the piece collision case 
+            {
+                
+            }
+            else if () //This would be the king is checked case.
             else
                 std::cout << "That was not a valid move, try again." << std::endl;
 
@@ -105,4 +110,11 @@ class Board{
                 std::cout << std::endl;
             }
         }
+
+        //This function checks the baord 
+        void checkBoard()
+        {
+
+        }
+
 };

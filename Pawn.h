@@ -18,6 +18,7 @@ class Pawn : public Piece
     Pawn(bool, bool, int, int);
     //Overloaded function for the movement of the piece.
     void move(int, int, Piece*, Piece* board[8][8]);
+    
     //The destructor for the pawn class. 
     ~Pawn();
 };
