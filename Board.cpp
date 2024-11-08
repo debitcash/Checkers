@@ -11,7 +11,7 @@ class Board{
         // declare the board and initialize the board values
         //(CHANGE: Jaisung) I have added that the board is now of a piece class, so it should take all of them.
         Piece* board[8][8] = {
-            {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr}, // black pieces
+            {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr}, // white pieces
             {new Pawn(false,false, 1, 0), new Pawn(false,false, 1,1), new Pawn(false,false, 1,2),
                 new Pawn(false,false,1,3), new Pawn(false,false, 1,4), new Pawn(false,false,1,5),
                 new Pawn(false,false, 1,6), new Pawn(false, false, 1,7)},
@@ -22,7 +22,7 @@ class Board{
             {new Pawn(true, false, 6,0), new Pawn(true, false, 6,1), new Pawn(true, false, 6, 2),
             new Pawn(true, false,  6,3), new Pawn(true, false, 6, 4), new Pawn(true, false, 6, 5),
             new Pawn(true, false, 6, 6), new Pawn(true, false, 6, 7)},
-            {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr}}; // white pieces
+            {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr}}; // black pieces
         
 
     public:
@@ -42,13 +42,15 @@ class Board{
 
             if(piece->isBlackCheck()) {
                 //invert the orign and dest rows/cols
+                invertBoard();
             }
             
 
-            valid = piece->isValidMove(destRow, destCol);
+            valid = piece->isValidMove(7 - destRow, 7 - destCol);
 
             if(piece->isBlackCheck()) {
                 //revert the origin and dest rows/cols
+                invertBoard();
             }
 
             //needs some kind of loop to deal with non-valid moves and user trying again
@@ -89,6 +91,26 @@ class Board{
             // // delete the object here?
             // board[originRow][originCol] = nullptr;
         }
+        
+        void invertBoard()
+        {
+        	
+        	for (int row = 0; row < 4; row++)
+        	{
+        		for (int column = 0; column < 8; column++)
+        		{
+        			Piece* temp = board[row][column];
+        			
+        			board[row][column] = board[7 - row][7 - column];
+        			
+        			board[7 - row][7 - column] = temp;
+        			
+        			if (row == 3 && column == 7)
+        				break;
+				}
+			}
+        	
+		}
         
         // display the board
         void display()

@@ -1,4 +1,5 @@
 #include "Pawn.h"
+#include "Piece.cpp"
 #include <iostream>
 //This is the pawn implementation class. 
 
