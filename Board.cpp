@@ -2,6 +2,7 @@
 #include "Pawn.h"
 #include "Pawn.cpp"
 #include "Piece.cpp" //added
+#include <cmath>
 //#include <typeinfo>
 //#include "Piece.cpp"
 //#include <typeinfo>
@@ -110,18 +111,19 @@ class Board{
         //Going back to the idea that each class should only contain its own logic not the whole board logic. 
         void newMove(int originRow, int originCol, int destRow, int destCol, int& turn)
         {
-            bool valid; 
+            bool valid = true; 
             //Allowing the chosen "Piece to be put at the origin"
             Piece* chosenPiece = board[originRow][originCol];
             
+        
            // Pawn* chosenPiece = dynamic_cast<Pawn*>(board[originRow][originCol]);
 
-            
         	if(chosenPiece->isBlackCheck()) 
 			{
                 //invert the orign and dest rows/cols
                 invertBoard();
-                valid = chosenPiece->isValidMove(7 - destRow, 7 - destCol, board);
+                valid = chosenPiece->isValidMove(abs(destRow - 7), abs(destCol - 7), board);
+                std:: cout <<  "Converted " << destRow << destCol << " to " << 7 - destRow << 7 - destCol;
            	}
             else
             {
@@ -170,6 +172,7 @@ class Board{
                     // delete the object here?
                     board[originRow][originCol] = nullptr;
 
+					//Pawn* pawn = dynamic_cast<Pawn>(chosenPiece);
                     originRow = destRow;
                     originCol = destCol;
                 }
@@ -177,7 +180,7 @@ class Board{
             }
             else
             {
-                std::cout << "This move isn't valid, please try again.";
+                std::cout << "This move isn't valid, please try again.\n";
             }
             
             
