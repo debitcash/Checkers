@@ -13,55 +13,18 @@ int main(){
     board.display();
     //board.newMove(1, 0, 2, 0, turn)
 	
-	
-	
-    board.newMove(6,1,5,1,turn);
-    board.display();
+	bool stalemate = false, checkmate = false;
     
-    
-    
-    
-    /*board.newMove(1,0,2,0,turn);
-    board.display();
-    std::cout << "Ended first move\n";
-    
-    
-    board.newMove(2,0,3,0,turn);
-    board.display();
-    std::cout << "Ended second move\n";
-    
-    board.newMove(3,0,4,0,turn);
-    board.display();
-    std::cout << "Ended third move\n";
-    
-    board.newMove(4,0,5,0,turn);
-    board.display();
-    std::cout << "Ended forth move\n";
-    
-    board.newMove(5,0,6,1,turn);
-    board.display();
-    std::cout << "Ended six move\n";
-    
-    board.newMove(6,1,7,2,turn);
-    board.display();
-    std::cout << "Ended sevens move\n";*/
-
-    
-
-    /*
-    board.newMove(4,0,5,0,turn);
-    board.display();
-    std::cout << "Ended fifth move\n";*/
-    
-    
-    
-    std::cout << "Just testing" << std::endl; //Just testing if the programming is running past this point.
-    
-    //turn++;
-    
-    
-    
-
+    while (!checkmate || !stalemate)
+    {
+        int originRow, originCol, destRow, destCol;
+        
+        std::cout << std::endl << "Provide the move in a form originRow originCol destRow destCol." << std::endl;
+        std::cin >> originRow >> originCol >> destRow >> destCol ;
+        
+        board.move(originRow, originCol, destRow, destCol, turn);
+        
+    }
     
 
     return 0;

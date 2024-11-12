@@ -1,11 +1,8 @@
 #include <iostream>
 #include "Pawn.h"
 #include "Pawn.cpp"
-#include "Piece.cpp" //added
+#include "Piece.cpp"
 #include <cmath>
-//#include <typeinfo>
-//#include "Piece.cpp"
-//#include <typeinfo>
 
 
 class Board{
@@ -22,128 +19,67 @@ class Board{
             {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
             {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
             {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
-            {new Pawn(true, false, 6,0), new Pawn(true, false, 6,1), new Pawn(true, false, 6, 2),
-            new Pawn(true, false,  6,3), new Pawn(true, false, 6, 4), new Pawn(true, false, 6, 5),
-            new Pawn(true, false, 6, 6), new Pawn(true, false, 6, 7)},
+            {new Pawn(true, false, 7 - 6 , 7 - 0 ), new Pawn(true, false, 7 - 6, 7 - 1), new Pawn(true, false, 7 - 6, 7 -2),
+            new Pawn(true, false,  7 - 6, 7 - 3), new Pawn(true, false, 7 - 6, 7 - 4), new Pawn(true, false, 7 - 6, 7 - 5),
+            new Pawn(true, false, 7 - 6, 7 - 6), new Pawn(true, false, 7 - 6, 7 - 7)},
             {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr}}; // black pieces
         
-
     public:
-        /*void move(int originRow, int originCol, int destRow, int destCol, int& turn)
-        {
-            bool valid;
-
-
-            //user's idea of the board and the array are flipped, something need to be adjust for this.
-                    
-            //figure out what piece is at origin position
-            //(CHAGE:JAISUNG) I had to dynamically cast this to the pawn class or else it couldn't use "move" properly 
-            Pawn* piece = dynamic_cast<Pawn*>(board[originRow][originCol]);
-
-
-        
-
-            if(piece->isBlackCheck()) {
-                //invert the orign and dest rows/cols
-                invertBoard();
-                valid = piece->isValidMove(7 - destRow, 7 - destCol, board);
-            }
-            
-
-            else
-            {
-            	valid = piece->isValidMove(destRow, destCol, board);
-			}
-            
-
-            //Inversion to destination. 
-            valid = piece->isValidMove(7 - destRow, 7 - destCol);
-
-            if(piece->isBlackCheck()) {
-                //revert the origin and dest rows/cols
-                invertBoard();
-            }
-
-            //needs some kind of loop to deal with non-valid moves and user trying again
-            if(valid == true) {
-                piece->move(destRow, destCol, board[destRow][destCol], board);
-                turn++;
-
-            }/*
-            else if () //This would be the piece collision case 
-            {
-                
-            }
-            else if () //This would be the king is checked case.
-
-            }
-
-            else
-                std::cout << "That was not a valid move, try again." << std::endl;*/
-
-            // check if chosen location has a present piece on it
-            // if (board[originRow][originCol] == nullptr)
-            // {
-            //     std::cout << "There is no piece present at this square";
-            //     return;
-            // }
-            //
-            // // check if its the user trying to move their respective color
-            // if (! ((board[originRow][originCol]->isBlackCheck() && turn % 2 ==0) || (!board[originRow][originCol]->isBlackCheck() && turn % 2 != 0)))
-            // {
-            //     std::cout << "You should move other color at current turn";
-            //     return;
-            // }
-
-            /* Trying to figure out how to enable diagonal moves for pond in this comment section
-             *  Piece& piece = *board[row1][column1];
-             */
-
-
- 
-            // // assign the piece to new location and empty the previous location
-            // board[destRow][destCol] = board[originRow][originCol];
-            // // delete the object here?
-            // board[originRow][originCol] = nullptr;
-        //}
-        
-        //Just testing a new move that maybe the board could check versues making each piece check itself 
+    
         //Going back to the idea that each class should only contain its own logic not the whole board logic. 
-        void newMove(int originRow, int originCol, int destRow, int destCol, int& turn)
+        void move(int originRow, int originCol, int destRow, int destCol, int& turn)
         {
-            bool valid = true; 
-            //Allowing the chosen "Piece to be put at the origin"
-            Piece* chosenPiece = board[originRow][originCol];
+            if (originRow > 7 || originRow < 0 || originCol > 7 || originCol < 0 )
+            {
+                std::cout << "The origin location is outside the board boundary, choose a valid origin." << std::endl;
+                return;
+            }
             
-        
-           // Pawn* chosenPiece = dynamic_cast<Pawn*>(board[originRow][originCol]);
-
+            else if (destRow > 7 || destRow < 0 || destCol > 7 || destCol < 0)
+            {
+                std::cout << "The chosen destination is outside the board boundary, choose a valid destination." << std::endl;
+                return;
+            }
+            
+            bool valid = true; 
+            Piece* chosenPiece;
+            
+            //Allowing the chosen "Piece to be put at the origin" 
+            if (board[originRow][originCol] != nullptr)
+                chosenPiece = board[originRow][originCol];
+            else
+            {
+                std::cout << "There is no piece at the chose location." << std::endl;
+                return;
+            }
+            
+            if (turn % 2 != 0 && chosenPiece->isBlackCheck())
+            {
+                std::cout << "Wrong piece, move white pieces now." << std::endl;
+                return;
+            }
+            
+            else if (turn % 2 == 0 && !chosenPiece->isBlackCheck())
+            {
+                std::cout << "Wrong piece, move black pieces now." << std::endl;
+                return;
+            }
+            
         	if(chosenPiece->isBlackCheck()) 
 			{
                 //invert the orign and dest rows/cols
                 invertBoard();
-                valid = chosenPiece->isValidMove(abs(destRow - 7), abs(destCol - 7), board);
-                std:: cout <<  "Converted " << destRow << destCol << " to " << 7 - destRow << 7 - destCol;
+                valid = chosenPiece->isValidMove(7 - destRow, 7 - destCol, board);
+                //revert the origin and dest rows/cols
+            	invertBoard();
            	}
+            
             else
             {
             	//Inversion to destination. 
             	valid = chosenPiece->isValidMove(destRow, destCol, board);
 			}
-            
 
-            if(chosenPiece->isBlackCheck()) 
-			{
-                //revert the origin and dest rows/cols
-            	invertBoard();
-           	}
-            
-            if (valid == false)
-            	{
-            		std::cout << "Wrong move";
-            		return;
-				}
-            
             //The idea behind this move function is that the board will actually move and think about the other pieces on the board. 
             //The pieces will just provide the logic of what they know, this will allow less coupling with other pieces.
             if(valid == true)
@@ -159,9 +95,6 @@ class Board{
                     
                     // assign the original area to null here.
                     board[originRow][originCol] = nullptr;
-
-                    originRow = destRow;
-                    originCol = destCol;
                 }
                 
                 //this is now going to be the case where the board place is empty
@@ -169,21 +102,21 @@ class Board{
                 {
                     // assign the piece to new location and empty the previous location
                     board[destRow][destCol] = board[originRow][originCol];
-                    // delete the object here?
+                    // delete the object here
+                    // delete the object here
                     board[originRow][originCol] = nullptr;
-
-					//Pawn* pawn = dynamic_cast<Pawn>(chosenPiece);
-                    originRow = destRow;
-                    originCol = destCol;
                 }
                 
+                // display the board after move was made
+                this->display();
+                
+                turn++;
             }
+            
             else
-            {
-                std::cout << "This move isn't valid, please try again.\n";
-            }
-            
-            
+            { 
+                std::cout << "This move isn't valid, please try again." << std::endl;
+            } 
         }
         
         
@@ -204,7 +137,6 @@ class Board{
         				break;
 				}
 			}
-        	
 		}
         
         // display the board
@@ -223,10 +155,8 @@ class Board{
                         std::cout << "P ";
                     }
                 }
-                
                 std::cout << std::endl;
             }
         }
-
 };
 
