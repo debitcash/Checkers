@@ -1,7 +1,5 @@
 #include "Board.cpp"
 
-
-
 int main(){
     
     Board board;
@@ -12,20 +10,20 @@ int main(){
     
     board.display();
     //board.newMove(1, 0, 2, 0, turn)
-	
-	bool stalemate = false, checkmate = false;
-    
-    while (!checkmate || !stalemate)
-    {
-        int originRow, originCol, destRow, destCol;
-        
-        std::cout << std::endl << "Provide the move in a form originRow originCol destRow destCol." << std::endl;
-        std::cin >> originRow >> originCol >> destRow >> destCol ;
-        
-        board.move(originRow, originCol, destRow, destCol, turn);
-        
-    }
-    
+	//
+	// bool stalemate = false, checkmate = false;
+ //
+ //    while (!checkmate || !stalemate)
+ //    {
+ //        int originRow, originCol, destRow, destCol;
+ //
+ //        std::cout << std::endl << "Provide the move in a form [originRow originCol destRow destCol.]" << std::endl;
+ //        std::cin >> originRow >> originCol >> destRow >> destCol ;
+ //
+ //        board.move(originRow, originCol, destRow, destCol, turn);
+ //
+ //    }
+ //
 
     return 0;
 }

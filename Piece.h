@@ -41,8 +41,6 @@ class Piece
         //Destructor, is a virtual so that it can be overloaded by the piece class when they are destroyed so we can write out the piece has been captuared
         virtual ~Piece();
 
-
-        
 };
 
 #endif // PIECE_H

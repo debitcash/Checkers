@@ -1,8 +1,9 @@
 #include <iostream>
 #include "Pawn.cpp"
 #include "King.cpp"
-#include <cmath>
+#include "Rook.cpp"
 
+#include <cmath>
 
 class Board{
 
@@ -10,7 +11,7 @@ class Board{
         // declare the board and initialize the board values
         //(CHANGE: Jaisung) I have added that the board is now of a piece class, so it should take all of them.
         Piece* board[8][8] = {
-            {nullptr, nullptr, nullptr, nullptr, new King(false, false, 0, 4), nullptr, nullptr, nullptr}, // white pieces
+            {new Rook(false, false, 0, 0), nullptr, nullptr, nullptr, new King(false, false, 0, 4), nullptr, nullptr, new Rook(false, false, 0, 7)}, // white pieces
             {new Pawn(false,false, 1, 0), new Pawn(false, false, 1, 1), new Pawn(false,false, 1,2),
                 new Pawn(false,false,1,3), new Pawn(false,false, 1,4), new Pawn(false,false,1,5),
                 new Pawn(false,false, 1,6), new Pawn(false, false, 1,7)},
@@ -21,7 +22,7 @@ class Board{
             {new Pawn(true, false, 7 - 6 , 7 - 0 ), new Pawn(true, false, 7 - 6, 7 - 1), new Pawn(true, false, 7 - 6, 7 -2),
             new Pawn(true, false,  7 - 6, 7 - 3), new Pawn(true, false, 7 - 6, 7 - 4), new Pawn(true, false, 7 - 6, 7 - 5),
             new Pawn(true, false, 7 - 6, 7 - 6), new Pawn(true, false, 7 - 6, 7 - 7)},
-            {nullptr, nullptr, nullptr, nullptr, new King(true, false, 7 - 7, 7 - 4), nullptr, nullptr, nullptr}}; // black pieces
+            {new Rook(true, false, 7 - 7 , 7-0 ), nullptr, nullptr, nullptr, new King(true, false, 7 - 7, 7 - 4), nullptr, nullptr, new Rook(true, false, 7 - 7, 7-7 )}}; // black pieces
         
     public:
     
@@ -153,7 +154,7 @@ class Board{
                 {
                     if (board[y][x] == nullptr)
                     {
-                        std::cout << "0 ";
+                        std::cout << ". ";
                     }
                     else
                     {

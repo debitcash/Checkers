@@ -15,6 +15,8 @@ class King : public Piece
     	King();
     	
     	King(bool, bool, int, int);
+
+		~King();
     	
     
 };

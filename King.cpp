@@ -1,5 +1,5 @@
 #include "King.h"
-#include "Piece.h"
+
 #include <iostream>
 
 King::King(bool newColour, bool newStatus, int newRow, int newCol) :  Piece(newColour, newStatus), originRow(newRow),originCol(newCol) {}
@@ -17,3 +17,9 @@ bool King::isValidMove(int destRow, int destCol, Piece* board[8][8])
 				return false;
 		
 	   }
+
+//Destructor
+King::~King()
+{
+	std::cout << "King has been captured" << std::endl;
+}
