@@ -1,9 +1,19 @@
 #include "Board.cpp"
+#include "Checker.h"
+
+#include <stdio.h>
+#include <math.h>
+
+#define PI 3.14159265
 
 int main(){
-    
-    Board board;
-    
+
+	//consider having player enter moves individually (specifically for double jump/ triple jump moves) this
+	//would make it so that board and piece class only have to consider cases of single moves, and just get multiple
+	//of them in a row
+
+	Board board;
+
     // start with white(white - odd, black - even)
     // white at bottom black at top
     int turn = 1; 

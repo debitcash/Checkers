@@ -90,6 +90,13 @@ class Board{
             //The pieces will just provide the logic of what they know, this will allow less coupling with other pieces.
             if(valid == true)
             {
+
+
+                //board assigns piece to destination position, null at origin
+                //board needs to check if a piece was jumped over/captured on the path, and remove that piece
+                //wonder if there's a way to find coordinate between dest and orgin on diagonal?
+                //assign that board spot to null
+
                 //This is going to be the capture logic when the board "senses" another piece is on the destination point
                 if(board[destRow][destCol] != nullptr && chosenPiece->isBlackCheck() != board[destRow][destCol] -> isBlackCheck())
                 {
