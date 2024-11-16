@@ -17,7 +17,7 @@
 	   		if(board[destRow][destCol] == nullptr)
 	   		{
 	            //single space move
-	            if(originRow + 1 == destRow && originCol == destCol) {
+	            if(originRow + 1 == destRow && originCol == destCol){
 	            	originRow = destRow;
 	            	originCol = destCol;
 	                return true;
