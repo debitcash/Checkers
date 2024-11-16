@@ -20,16 +20,24 @@ bool Checker::isValidMove(int destRow, int destCol, Piece* board[8][8]) {
 
     bool validMove;
 
+    //requested destination must not have a piece there already
     //requested destination must not have a piece there already.
     if (board[destRow][destCol] != nullptr) {
+        validMove = false;
         return false;
     }
+    //Standard single space move
+    else if((originRow + 1 == destRow) && ((originCol + 1 == destCol) || (originCol - 1 == destCol))){
+        validMove = true;
+    }
+    //Capture move
+    
 
     //calculating the angle between the origin and destination coordinate
     int value = std::abs(std::round(atan2 (destRow - originRow,destCol - originCol) * 180 / PI));
 
     //Making sure it's a diagonal move
-    if(value == 45 || value == 135 ) {
+    if (value == 45 || value == 135 ) {
         //Standard Move, no capture
         if((originRow + 1 == destRow) && ((originCol + 1 == destCol) || (originCol - 1 == destCol))) {
             validMove = true;
@@ -40,7 +48,26 @@ bool Checker::isValidMove(int destRow, int destCol, Piece* board[8][8]) {
         //test if piece is there first
         //then test if the piece isBlack() or !isBlack()
         //if the right color then validMove
-        //else if() {}
+        else if((originRow + 2 == destRow) && (originCol + 2 == destCol) || (originCol - 2 == destCol) ){
+            //An interesting math concept is that the average of the two points are the midpoint
+            //Because you are getting the "middle" of x and y, so we should be able to use the midpoint.
+            //And with the midpoint, we can see if there is a checker inbetween it so that can modify it. 
+
+            int midRow = ((destRow + originRow)/2);
+            int midCol = ((destCol + originCol)/2);
+
+            if(board[midRow][midCol] != nullptr)
+            {
+                validMove = true; 
+            }
+            else
+            {
+                validMove = false; 
+            }
+
+        }
+
+        
     }
     else {
         validMove = false;
@@ -59,9 +86,6 @@ bool Checker::isValidMove(int destRow, int destCol, Piece* board[8][8]) {
 Checker::~Checker() {
     std::cout << "Checker has been captured." << std::endl;
 }
-
-
-
 
 
 
