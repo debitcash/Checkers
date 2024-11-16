@@ -1,7 +1,6 @@
 #include <iostream>
-#include "Checker.cpp"
-#include "Piece.cpp"
-
+#include "Checker.h"
+#include "Piece.h"
 
 #include <cmath>
 
@@ -159,6 +158,7 @@ class Board{
         {
             for (int y = 0; y < 8; y++)
             {
+                std::cout << y + 1 << " | ";
                 for (int x = 0; x < 8; x++)
                 {
                     if (board[y][x] == nullptr)
@@ -178,6 +178,8 @@ class Board{
                 }
                 std::cout << std::endl;
             }
+            std::cout << "--+-----------------" << std::endl;
+            std::cout << "  | a b c d e f g h" << std::endl;
         }
 };
 
