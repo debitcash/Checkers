@@ -11,9 +11,9 @@ class Piece
     bool isPieceCaptured;
 
     //current row of the piece
-    int originRow{};
+    int originRow;
     //current column of the piece
-    int originCol{};
+    int originCol;
 
     public:
         //Default constructor

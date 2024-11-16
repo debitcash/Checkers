@@ -1,7 +1,7 @@
 #include <iostream>
-#include "Pawn.cpp"
-#include "King.cpp"
-#include "Rook.cpp"
+#include "Checker.cpp"
+#include "Piece.cpp"
+
 
 #include <cmath>
 
@@ -11,18 +11,20 @@ class Board{
         // declare the board and initialize the board values
         //(CHANGE: Jaisung) I have added that the board is now of a piece class, so it should take all of them.
         Piece* board[8][8] = {
-            {new Rook(false, false, 0, 0), nullptr, nullptr, nullptr, new King(false, false, 0, 4), nullptr, nullptr, new Rook(false, false, 0, 7)}, // white pieces
-            {new Pawn(false,false, 1, 0), new Pawn(false, false, 1, 1), new Pawn(false,false, 1,2),
-                new Pawn(false,false,1,3), new Pawn(false,false, 1,4), new Pawn(false,false,1,5),
-                new Pawn(false,false, 1,6), new Pawn(false, false, 1,7)},
+            {nullptr, new Checker(false, false, 0, 1), nullptr, new Checker(false, false, 0, 3), 
+                nullptr, new Checker(false, false, 0, 5), nullptr, new Checker(false, false, 0, 7)}, // RED pieces
+            {new Checker(false, false, 1, 0), nullptr, new Checker(false, false, 0, 2), nullptr, 
+                new Checker(false, false, 0, 4), nullptr, new Checker(false, false, 0, 6), nullptr},
+            {nullptr, new Checker(false, false, 2, 1), nullptr, new Checker(false, false, 2, 3), 
+                nullptr, new Checker(false, false, 2, 5), nullptr, new Checker(false, false, 2, 7)},
             {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
             {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
-            {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
-            {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
-            {new Pawn(true, false, 7 - 6 , 7 - 0 ), new Pawn(true, false, 7 - 6, 7 - 1), new Pawn(true, false, 7 - 6, 7 -2),
-            new Pawn(true, false,  7 - 6, 7 - 3), new Pawn(true, false, 7 - 6, 7 - 4), new Pawn(true, false, 7 - 6, 7 - 5),
-            new Pawn(true, false, 7 - 6, 7 - 6), new Pawn(true, false, 7 - 6, 7 - 7)},
-            {new Rook(true, false, 7 - 7 , 7-0 ), nullptr, nullptr, nullptr, new King(true, false, 7 - 7, 7 - 4), nullptr, nullptr, new Rook(true, false, 7 - 7, 7-7 )}}; // black pieces
+            {new Checker(true, false, 5, 0), nullptr, new Checker(true, false, 5, 2), nullptr, 
+                new Checker(true, false, 5, 4), nullptr, new Checker(true, false, 5, 6), nullptr},
+            {nullptr, new Checker(true, false, 6, 1), nullptr, new Checker(true, false, 6, 3), nullptr, 
+                new Checker(true, false, 6, 5), nullptr, new Checker(true, false, 6, 7)},
+            {new Checker(true, false, 7, 0), nullptr, new Checker(true, false, 7, 2), nullptr, 
+                new Checker(true, false, 7, 4), nullptr, new Checker(true, false, 7, 6), nullptr}}; // black pieces
         
     public:
     
@@ -163,10 +165,16 @@ class Board{
                     {
                         std::cout << ". ";
                     }
-                    else
+                    else if (board[y][x]->isBlackCheck())
                     {
-                        std::cout << "P ";
+                        std::cout << "b ";
                     }
+                    
+                    else if (!board[y][x]->isBlackCheck())
+                    {
+                        std::cout << "r ";
+                    }
+                    
                 }
                 std::cout << std::endl;
             }

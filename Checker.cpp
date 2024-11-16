@@ -40,10 +40,7 @@ bool Checker::isValidMove(int destRow, int destCol, Piece* board[8][8]) {
         //test if piece is there first
         //then test if the piece isBlack() or !isBlack()
         //if the right color then validMove
-        else if() {
-
-
-        }
+        //else if() {}
     }
     else {
         validMove = false;
