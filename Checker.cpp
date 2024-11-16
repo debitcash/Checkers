@@ -16,18 +16,18 @@ Checker::Checker() : Piece(){};
 Checker::Checker(bool newColour, bool newStatus, int newRow, int newCol) : Piece(newColour, newStatus, newRow, newCol) {}
 
 
-bool Checker::isValidMove(int destRow, int destCol, Piece* board[8][8]) {
+bool Checker::isValidMove(int destRow, int destCol /*, Piece* board[8][8]*/) {
 
     bool validMove;
 
     //requested destination must not have a piece there already
     //requested destination must not have a piece there already.
-    if (board[destRow][destCol] != nullptr) {
+    /*if (board[destRow][destCol] != nullptr) {
         validMove = false;
         return false;
-    }
+    }*/
     //Standard single space move
-    else if((originRow + 1 == destRow) && ((originCol + 1 == destCol) || (originCol - 1 == destCol))){
+    if((originRow + 1 == destRow) && ((originCol + 1 == destCol) || (originCol - 1 == destCol))){
         validMove = true;
     }
     //Capture move
@@ -53,7 +53,7 @@ bool Checker::isValidMove(int destRow, int destCol, Piece* board[8][8]) {
             //Because you are getting the "middle" of x and y, so we should be able to use the midpoint.
             //And with the midpoint, we can see if there is a checker inbetween it so that can modify it. 
 
-            int midRow = ((destRow + originRow)/2);
+            /*int midRow = ((destRow + originRow)/2);
             int midCol = ((destCol + originCol)/2);
 
             if(board[midRow][midCol] != nullptr)
@@ -63,8 +63,9 @@ bool Checker::isValidMove(int destRow, int destCol, Piece* board[8][8]) {
             else
             {
                 validMove = false; 
-            }
-
+            }*/
+           
+           validMove = true; 
         }
 
         

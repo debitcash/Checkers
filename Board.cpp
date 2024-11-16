@@ -76,7 +76,7 @@ class Board{
 			{
                 //invert the orign and dest rows/cols
                 invertBoard();
-                valid = chosenPiece->isValidMove(7 - destRow, 7 - destCol, board);
+                valid = chosenPiece->isValidMove(7 - destRow, 7 - destCol /*, board*/);
                 //revert the origin and dest rows/cols
             	invertBoard();
            	}
@@ -84,7 +84,7 @@ class Board{
             else
             {
             	//Inversion to destination. 
-            	valid = chosenPiece->isValidMove(destRow, destCol, board);
+            	valid = chosenPiece->isValidMove(destRow, destCol /*,board*/);
 			}
 
             //The idea behind this move function is that the board will actually move and think about the other pieces on the board. 
@@ -92,34 +92,6 @@ class Board{
             if(valid == true)
             {
 
-
-                //board assigns piece to destination position, null at origin
-                //board needs to check if a piece was jumped over/captured on the path, and remove that piece
-                //wonder if there's a way to find coordinate between dest and orgin on diagonal?
-                //assign that board spot to null
-
-                //This is going to be the capture logic when the board "senses" another piece is on the destination point
-                if(board[destRow][destCol] != nullptr && chosenPiece->isBlackCheck() != board[destRow][destCol] -> isBlackCheck())
-                {
-                    //Delete the old piece, capturing it. It should call the destructor and that will allow it to message that the piece is destroyed.
-                    delete board[destRow][destCol];
-                    
-                    //assign the piece to the new location 
-                    board[destRow][destCol] = board[originRow][originCol];
-                    
-                    // assign the original area to null here.
-                    board[originRow][originCol] = nullptr;
-                }
-                
-                //this is now going to be the case where the board place is empty
-                else if (board[destRow][destCol] == nullptr)
-                {
-                    // assign the piece to new location and empty the previous location
-                    board[destRow][destCol] = board[originRow][originCol];
-                    // delete the object here
-                    // delete the object here
-                    board[originRow][originCol] = nullptr;
-                }
                 
                 // display the board after move was made
                 this->display();
