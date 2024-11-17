@@ -1,6 +1,6 @@
-#include "Board.h"
-#include "Checker.h"
-#include "Piece.h"
+#include "Board.cpp"
+#include "Checker.cpp"
+#include "Piece.cpp"
 /*#include "Checker.h"
 
 #include <stdio.h>
@@ -31,11 +31,11 @@ int main(){
 		int originRow, destRow;
 		char originCol, destCol;
 
-		std::string color = "Black";
+		std::string color = "Red";
 		std::string input;
 
 		if(turn % 2 == 0) {
-			color = "Red";
+			color = "Black";
 		}
 
 		std::cout << color << "'s turn." << std::endl;

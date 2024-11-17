@@ -21,6 +21,13 @@
                 return;
             }
             
+            
+            if(board[destRow][destCol] != nullptr)
+            {
+                std::cout << "The destination is already occupied. Try another destination.";
+                return;
+            }
+            
             bool valid = true; 
             Piece* chosenPiece;
             
@@ -64,31 +71,51 @@
             //The pieces will just provide the logic of what they know, this will allow less coupling with other pieces.
             if(valid == true)
             {
-                //board assigns piece to destination position, null at origin
-                //board needs to check if a piece was jumped over/captured on the path, and remove that piece
-                //wonder if there's a way to find coordinate between dest and orgin on diagonal?
-                //assign that board spot to null
-                //This is going to be the capture logic when the board "senses" another piece is on the destination point
-                if(board[destRow][destCol] != nullptr && chosenPiece->isBlackCheck() != board[destRow][destCol] -> isBlackCheck())
+                // destination is not null(because checked previously), so we can straight away move the piece and capture the attacked piece
                 {
-                    //Delete the old piece, capturing it. It should call the destructor and that will allow it to message that the piece is destroyed.
-                    delete board[destRow][destCol];
+                    if (chosenPiece->isBlackCheck())
+                    {
+                        invertBoard();
+                        
+                        //inverting the coordinates so that they would work for black 
+                        destRow = 7 - destRow;
+                        destCol = 7 - destCol;
+                        originRow = 7 - originRow;
+                        originCol = 7 - originCol;
+                    }
+                        
                     
-                    //assign the piece to the new location 
-                    board[destRow][destCol] = board[originRow][originCol];
+                    // if capturing move, delete the opposing piece
+                    // doublecheck if piece to be captures is of opposing color
+                    if (originRow + 2 == destRow && board[(destRow + originRow) / 2][(destCol + originCol) / 2]->isBlackCheck() != chosenPiece->isBlackCheck())
+                    {
+                        delete board[(destRow + originRow) / 2][(destCol + originCol) / 2];
+                        board[(destRow + originRow) / 2][(destCol + originCol) / 2] = nullptr;
+                    }
                     
-                    // assign the original area to null here.
-                    board[originRow][originCol] = nullptr;
-                }
-                
-                //this is now going to be the case where the board place is empty
-                else if (board[destRow][destCol] == nullptr)
-                {
+                    else if ((originRow + 2 == destRow && board[(destRow + originRow) / 2][(destCol + originCol) / 2]->isBlackCheck() == chosenPiece->isBlackCheck()))
+                    {
+                        std::cout << "Can not capture same color piece. Try again";
+                        return;
+                    }
+                    
+                    if (chosenPiece->isBlackCheck())
+                    {
+                        invertBoard();
+                        
+                        // inverting back to normal coordinates
+                        destRow = 7 - destRow;
+                        destCol = 7 - destCol;
+                        originRow = 7 - originRow;
+                        originCol = 7 - originCol;
+                    }
+                    
                     // assign the piece to new location and empty the previous location
                     board[destRow][destCol] = board[originRow][originCol];
-                    // delete the object here
-                    // delete the object here
+                     
+                    // reset the pointer to null
                     board[originRow][originCol] = nullptr;
+                    
                 }
                 
                 // display the board after move was made
