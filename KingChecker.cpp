@@ -20,7 +20,7 @@ bool KingChecker::isValidMove(int destRow, int destCol)
     //Keeping the orginally moving up rule.
 
 
-    //Calculating the value between the origin and destitnation coordinates. 
+    //Calculating the value between the origin and destination coordinates.
     int value = std::abs(std::round(atan2 (destRow - originRow,destCol - originCol) * 180 / PI));
 
 
@@ -28,23 +28,32 @@ bool KingChecker::isValidMove(int destRow, int destCol)
     //calculating 225 
     if (value == 45 || value == 135 || value == 225 || value == 315)
     {
-
-    if((originRow + 1 == destRow) && ((originCol + 1 == destCol) || (originCol - 1 == destCol))){
-        validMove = true;
-    }
-    //Moving down just by one
-    else if ( (originRow - 1 == destRow) && ((originCol - 1 == destCol) || (originCol + 1 ==destCol)))
-    {
-        validMove = true;
-    }
-     else if((originRow + 2 == destRow) && (originCol + 2 == destCol) && () || (originCol - 2 == destCol) ){
-
-           validMove = true; 
+        //Because we've already checked that's its a diagonal move we only need to check the destRow is good, not the col also
+        if((originRow + 1 == destRow)||(originRow - 1 == destRow)||(originRow + 2 == destRow)||(originRow - 2 == destRow)) {
+            validMove = true;
         }
 
+        /*if((originRow + 1 == destRow) && ((originCol + 1 == destCol) || (originCol - 1 == destCol))){
+            validMove = true;
+        }
+        //Moving down just by one
+        else if ( (originRow - 1 == destRow) && ((originCol - 1 == destCol) || (originCol + 1 ==destCol)))
+        {
+            validMove = true;
+        }
+         else if((originRow + 2 == destRow) && (originCol + 2 == destCol) && () || (originCol - 2 == destCol) ){
 
+               validMove = true;
+         }*/
 
     }
+    else {
+        validMove = false;
+    }
 
+    return validMove;
+}
 
+KingChecker::~KingChecker() {
+    std::cout << "King Checker has been captured." << std::endl;
 }

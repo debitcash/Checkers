@@ -29,6 +29,6 @@ void Piece::setBlack(bool newColour)
 
 Piece::~Piece()
 {
-    std::cout << "Piece has been captured" << std::endl;
+    //std::cout << "Piece has been captured" << std::endl;
 }
 

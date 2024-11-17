@@ -29,15 +29,15 @@ private:
 
 
 public:
-    void move(int originRow, int originCol, int destRow, int destCol, int& turn);
+    void move(/*int originRow, int originCol, int destRow, int destCol,*/std::string input ,int& turn);
 
     void invertBoard();
 
     void display();
 
+    bool checkForError(int originRow, int originCol, int destRow, int destCol, const int& turn, const Piece* chosenPiece);
+
 };
-
-
 
 
 #endif //BOARD_H

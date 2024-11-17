@@ -1,17 +1,28 @@
-#include "Board.cpp"
-#include "Checker.cpp"
-#include "Piece.cpp"
-/*#include "Checker.h"
+//my compiler can't handle having the .cpp files included, only the .h. yours seems the opposite?
+/*#include "Board.cpp"
+#include "Checker.cpp"*/
 
-#include <stdio.h>
-#include <math.h>
-
-#define PI 3.14159265*/
-
-//parses a string into 2 pairs of ints
-std::pair<std::pair<int, int>, std::pair<int, int> > parseMove(const std::string& move);
+#include "Board.h"
+#include <iomanip>
 
 int main(){
+
+	std::cout << "\t\tWelcome to checkers!" << std::endl;
+	std::cout << "|********************************************************************|" << std::endl;
+	std::cout << "|  " <<  std::setw(65) << std::left <<  "Checkers is a two-player game, where each player moves pieces" <<" |" << std::endl;
+	std::cout << "|  " <<  std::setw(65) << std::left <<  "diagonally. Pieces can move one square forward or capture an" <<" |" << std::endl;
+	std::cout << "|  " <<  std::setw(65) << std::left <<  "opponent's piece by jumping over it to an empty square. Kings" <<" |" << std::endl;
+	std::cout << "|  " <<  std::setw(65) << std::left <<  "(created when a piece reaches the opponent's back row) can move" <<" |" << std::endl;
+	std::cout << "|  " <<  std::setw(65) << std::left <<  "both forward and backward. The goal is to capture all opponent" <<" |" << std::endl;
+	std::cout << "|  " <<  std::setw(65) << std::left <<  "pieces or block them so they can't move." <<" |" << std::endl;
+	std::cout << "|--------------------------------------------------------------------|" << std::endl;
+	std::cout << "|  " <<  std::setw(65) << std::left <<  "Provide moves in the form row+col>row+col" <<" |" << std::endl;
+	std::cout << "|  " <<  std::setw(61) << std::left <<  "\teg. b3>c4" << " |" << std::endl;
+	std::cout << "|  " <<  std::setw(65) << std::left <<  "To perform multiple jump moves, enter the first set of" <<" |" << std::endl;
+	std::cout << "|  " <<  std::setw(65) << std::left <<  "coordinates, an ampersand (&), then the second set of coordinates." <<"|" << std::endl;
+	std::cout << "|  " <<  std::setw(61) << std::left <<  "\teg. b3>d5&d5>b7" <<" |" << std::endl;
+	std::cout << "|********************************************************************|" << std::endl;
+	std::cout << "\t\tHave fun!" << std::endl << std::endl;
 
 	//consider having player enter moves individually (specifically for double jump/ triple jump moves) this
 	//would make it so that board and piece class only have to consider cases of single moves, and just get multiple
@@ -26,45 +37,23 @@ int main(){
     board.display();
 
 	bool cont = true;
+	std::string color;
+	std::string input;
 
 	while(cont) {
-		int originRow, destRow;
-		char originCol, destCol;
-
-		std::string color = "Red";
-		std::string input;
 
 		if(turn % 2 == 0) {
 			color = "Black";
+		}else {
+			color = "Red";
 		}
 
 		std::cout << color << "'s turn." << std::endl;
-		std::cout << "Provide a move in the form row+col>row+col\n\teg. b3>c4" << std::endl;
+		//std::cout << "Provide a move in the form row+col>row+col\n\teg. b3>c4" << std::endl;
 		std::cin >> input;
 
-		auto result = parseMove(input);
-
-		//std::cout << originCol << originRow << destCol << destRow;
-		board.move(result.first.first, result.first.second, result.second.first, result.second.second, turn);
+		board.move(input, turn);
 	}
 
     return 0;
-}
-
-//parses the inputed string into 2 pairs of ints. the first pair is the intial row & col, second is the destination row & col
-std::pair<std::pair<int, int>, std::pair<int, int> > parseMove(const std::string& move) {
-
-	//if the entered string is not the right length or doesnt contain the '>' symbol in the right position
-	//then garbage coordinates are returned that the board will then display an error message for
-	if(move.size() != 5 || move[2] != '>') {
-		return std::make_pair(std::make_pair(-1, -1), std::make_pair(-1, -1));
-	}
-
-	//adjusts the input for the board's handling of coordinates
-	int originCol = move[0] - 'a';
-	int originrow = move[1] - '1';
-	int destCol = move[3] - 'a';
-	int destrow = move[4] - '1';
-
-	return {{originrow, originCol}, {destrow, destCol} };
 }
