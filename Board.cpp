@@ -137,12 +137,12 @@
                     }
                     else if (board[y][x]->isBlackCheck())
                     {
-                        std::cout << "r ";
+                        std::cout << "b ";
                     }
                     
                     else if (!board[y][x]->isBlackCheck())
                     {
-                        std::cout << "b ";
+                        std::cout << "r ";
                     }
                     
                 }
