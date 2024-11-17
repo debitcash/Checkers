@@ -1,34 +1,7 @@
-#include <iostream>
-#include "Checker.h"
-#include "Piece.h"
+#include "Board.h"
 
-#include <cmath>
-
-class Board{
-
-    private:
-        // declare the board and initialize the board values
-        //(CHANGE: Jaisung) I have added that the board is now of a piece class, so it should take all of them.
-        Piece* board[8][8] = {
-            {nullptr, new Checker(false, false, 0, 1), nullptr, new Checker(false, false, 0, 3), 
-                nullptr, new Checker(false, false, 0, 5), nullptr, new Checker(false, false, 0, 7)}, // RED pieces
-            {new Checker(false, false, 1, 0), nullptr, new Checker(false, false, 1, 2), nullptr, 
-                new Checker(false, false, 1, 4), nullptr, new Checker(false, false, 1, 6), nullptr},
-            {nullptr, new Checker(false, false, 2, 1), nullptr, new Checker(false, false, 2, 3), 
-                nullptr, new Checker(false, false, 2, 5), nullptr, new Checker(false, false, 2, 7)},
-            {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
-            {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
-            {new Checker(true, false, 7 - 5, 7 - 0), nullptr, new Checker(true, false, 7 - 5, 7 - 2), nullptr, 
-                new Checker(true, false, 7 - 5, 7 - 4), nullptr, new Checker(true, false, 7 - 5, 7 - 6), nullptr},
-            {nullptr, new Checker(true, false, 7 - 6, 7 - 1), nullptr, new Checker(true, false, 7 - 6, 7 - 3), nullptr, 
-                new Checker(true, false, 7 - 6, 7 - 5), nullptr, new Checker(true, false, 7 - 6, 7 - 7)},
-            {new Checker(true, false, 7 - 7, 7 - 0), nullptr, new Checker(true, false, 7 - 7, 7 - 2), nullptr, 
-                new Checker(true, false, 7 - 7, 7 - 4), nullptr, new Checker(true, false, 7 - 7, 7 - 6), nullptr}}; // black pieces
-        
-    public:
-    
         //Going back to the idea that each class should only contain its own logic not the whole board logic. 
-        void move(int originRow, int originCol, int destRow, int destCol, int& turn)
+        void Board::move(int originRow, int originCol, int destRow, int destCol, int& turn)
         {
             if (originRow > 7 || originRow < 0 || originCol > 7 || originCol < 0 )
             {
@@ -131,7 +104,7 @@ class Board{
         }
         
         
-        void invertBoard()
+        void Board::invertBoard()
         {
         	
         	for (int row = 0; row < 4; row++)
@@ -151,7 +124,7 @@ class Board{
 		}
         
         // display the board
-        void display()
+        void Board::display()
         {
             for (int y = 0; y < 8; y++)
             {
@@ -164,12 +137,12 @@ class Board{
                     }
                     else if (board[y][x]->isBlackCheck())
                     {
-                        std::cout << "b ";
+                        std::cout << "r ";
                     }
                     
                     else if (!board[y][x]->isBlackCheck())
                     {
-                        std::cout << "r ";
+                        std::cout << "b ";
                     }
                     
                 }
@@ -178,5 +151,4 @@ class Board{
             std::cout << "--+-----------------" << std::endl;
             std::cout << "  | a b c d e f g h" << std::endl;
         }
-};
 

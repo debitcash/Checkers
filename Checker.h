@@ -19,6 +19,4 @@ public:
     ~Checker();
 };
 
-
-
 #endif //CHECKER_H
