@@ -38,6 +38,7 @@ bool Checker::isValidMove(int destRow, int destCol /*, Piece* board[8][8]*/) {
 
     //Making sure it's a diagonal move
     if (value == 45 || value == 135 ) {
+        
         //Standard Move, no capture
         if((originRow + 1 == destRow) && ((originCol + 1 == destCol) || (originCol - 1 == destCol))) {
             validMove = true;

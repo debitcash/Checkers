@@ -1,4 +1,6 @@
 #include "Board.cpp"
+#include "Checker.cpp"
+#include "Piece.cpp"
 /*#include "Checker.h"
 
 #include <stdio.h>
@@ -6,7 +8,7 @@
 
 #define PI 3.14159265*/
 
-std::pair<std::pair<int, int>, std::pair<int, int>> parseMove(const std::string& move);
+std::pair<std::pair<int, int>, std::pair<int, int> > parseMove(const std::string& move);
 
 int main(){
 
@@ -16,7 +18,7 @@ int main(){
 
 	Board board;
 
-    // start with white(white - odd, black - even)
+    // start with white(red - odd, black - even)
     // white at bottom black at top
     int turn = 1; 
     
@@ -38,7 +40,7 @@ int main(){
 
 		//std::cout << originCol << originRow << destCol << destRow;
 		board.move(result.first.first, result.first.second, result.second.first, result.second.second, turn);
-		turn++;
+		
 
 		//board.display();
 	}
@@ -60,7 +62,7 @@ int main(){
     return 0;
 }
 
-std::pair<std::pair<int, int>, std::pair<int, int>> parseMove(const std::string& move) {
+std::pair<std::pair<int, int>, std::pair<int, int> > parseMove(const std::string& move) {
 	if(move.size() != 5 || move[2] != '>') {
 		return std::make_pair(std::make_pair(-1, -1), std::make_pair(-1, -1));
 	}

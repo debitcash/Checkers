@@ -12,18 +12,18 @@ class Board{
         Piece* board[8][8] = {
             {nullptr, new Checker(false, false, 0, 1), nullptr, new Checker(false, false, 0, 3), 
                 nullptr, new Checker(false, false, 0, 5), nullptr, new Checker(false, false, 0, 7)}, // RED pieces
-            {new Checker(false, false, 1, 0), nullptr, new Checker(false, false, 0, 2), nullptr, 
-                new Checker(false, false, 0, 4), nullptr, new Checker(false, false, 0, 6), nullptr},
+            {new Checker(false, false, 1, 0), nullptr, new Checker(false, false, 1, 2), nullptr, 
+                new Checker(false, false, 1, 4), nullptr, new Checker(false, false, 1, 6), nullptr},
             {nullptr, new Checker(false, false, 2, 1), nullptr, new Checker(false, false, 2, 3), 
                 nullptr, new Checker(false, false, 2, 5), nullptr, new Checker(false, false, 2, 7)},
             {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
             {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
-            {new Checker(true, false, 5, 0), nullptr, new Checker(true, false, 5, 2), nullptr, 
-                new Checker(true, false, 5, 4), nullptr, new Checker(true, false, 5, 6), nullptr},
-            {nullptr, new Checker(true, false, 6, 1), nullptr, new Checker(true, false, 6, 3), nullptr, 
-                new Checker(true, false, 6, 5), nullptr, new Checker(true, false, 6, 7)},
-            {new Checker(true, false, 7, 0), nullptr, new Checker(true, false, 7, 2), nullptr, 
-                new Checker(true, false, 7, 4), nullptr, new Checker(true, false, 7, 6), nullptr}}; // black pieces
+            {new Checker(true, false, 7 - 5, 7 - 0), nullptr, new Checker(true, false, 7 - 5, 7 - 2), nullptr, 
+                new Checker(true, false, 7 - 5, 7 - 4), nullptr, new Checker(true, false, 7 - 5, 7 - 6), nullptr},
+            {nullptr, new Checker(true, false, 7 - 6, 7 - 1), nullptr, new Checker(true, false, 7 - 6, 7 - 3), nullptr, 
+                new Checker(true, false, 7 - 6, 7 - 5), nullptr, new Checker(true, false, 7 - 6, 7 - 7)},
+            {new Checker(true, false, 7 - 7, 7 - 0), nullptr, new Checker(true, false, 7 - 7, 7 - 2), nullptr, 
+                new Checker(true, false, 7 - 7, 7 - 4), nullptr, new Checker(true, false, 7 - 7, 7 - 6), nullptr}}; // black pieces
         
     public:
     
@@ -62,7 +62,7 @@ class Board{
             
             if (turn % 2 != 0 && chosenPiece->isBlackCheck())
             {
-                std::cout << "Wrong piece, move white pieces now." << std::endl;
+                std::cout << "Wrong piece, move red pieces now." << std::endl;
                 return;
             }
             
@@ -91,7 +91,32 @@ class Board{
             //The pieces will just provide the logic of what they know, this will allow less coupling with other pieces.
             if(valid == true)
             {
-
+                //board assigns piece to destination position, null at origin
+                //board needs to check if a piece was jumped over/captured on the path, and remove that piece
+                //wonder if there's a way to find coordinate between dest and orgin on diagonal?
+                //assign that board spot to null
+                //This is going to be the capture logic when the board "senses" another piece is on the destination point
+                if(board[destRow][destCol] != nullptr && chosenPiece->isBlackCheck() != board[destRow][destCol] -> isBlackCheck())
+                {
+                    //Delete the old piece, capturing it. It should call the destructor and that will allow it to message that the piece is destroyed.
+                    delete board[destRow][destCol];
+                    
+                    //assign the piece to the new location 
+                    board[destRow][destCol] = board[originRow][originCol];
+                    
+                    // assign the original area to null here.
+                    board[originRow][originCol] = nullptr;
+                }
+                
+                //this is now going to be the case where the board place is empty
+                else if (board[destRow][destCol] == nullptr)
+                {
+                    // assign the piece to new location and empty the previous location
+                    board[destRow][destCol] = board[originRow][originCol];
+                    // delete the object here
+                    // delete the object here
+                    board[originRow][originCol] = nullptr;
+                }
                 
                 // display the board after move was made
                 this->display();
