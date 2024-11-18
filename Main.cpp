@@ -1,6 +1,7 @@
 //my compiler can't handle having the .cpp files included, only the .h. yours seems the opposite?
-/*#include "Board.cpp"
-#include "Checker.cpp"*/
+//include "Board.cpp"
+//#include "Checker.cpp"
+//#include "Piece.cpp"
 
 #include "Board.h"
 #include <iomanip>
@@ -50,9 +51,9 @@ int main(){
 
 		std::cout << color << "'s turn." << std::endl;
 		//std::cout << "Provide a move in the form row+col>row+col\n\teg. b3>c4" << std::endl;
-		std::cin >> input;
+		std::getline(std::cin, input);
 
-		board.move(input, turn);
+		board.attemptMove(input, turn);
 	}
 
     return 0;

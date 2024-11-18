@@ -27,6 +27,15 @@ void Piece::setBlack(bool newColour)
     isBlack = newColour;
 }
 
+// Setter for destination column
+void Piece::setOriginCol(int newOriginCol) {
+    originCol = newOriginCol;
+}
+
+void Piece::setOriginRow(int newOriginRow) {
+    originRow = newOriginRow;
+}
+
 Piece::~Piece()
 {
     //std::cout << "Piece has been captured" << std::endl;

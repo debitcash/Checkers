@@ -32,7 +32,7 @@ bool Checker::isValidMove(int destRow, int destCol /*, Piece* board[8][8]*/) {
     }*/
     //Capture move
     
-
+    //std::cout <<originRow <<originCol << " " << destRow<<destRow;
     //calculating the angle between the origin and destination coordinate
     int value = std::abs(std::round(atan2 (destRow - originRow,destCol - originCol) * 180 / PI));
 
@@ -70,10 +70,10 @@ bool Checker::isValidMove(int destRow, int destCol /*, Piece* board[8][8]*/) {
     }
 
     //if move is successful, update position of checker
-    if(validMove) {
+    /*if(validMove) {
         originRow = destRow;
         originCol = destCol;
-    }
+    }*/
 
     return validMove;
 }
@@ -81,6 +81,3 @@ bool Checker::isValidMove(int destRow, int destCol /*, Piece* board[8][8]*/) {
 Checker::~Checker() {
     std::cout << "Checker has been captured." << std::endl;
 }
-
-
-

@@ -29,11 +29,15 @@ private:
 
 
 public:
-    void move(/*int originRow, int originCol, int destRow, int destCol,*/std::string input ,int& turn);
+    void move(/*int originRow, int originCol, int destRow, int destCol,*/std::pair<std::pair<int, int>, std::pair<int, int> > move, int& turn);
+
+    void attemptMove(std::string input, int& turn);
 
     void invertBoard();
 
     void display();
+    
+    bool isSequenceValid(std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > sequence);
 
     bool checkForError(int originRow, int originCol, int destRow, int destCol, const int& turn, const Piece* chosenPiece);
 
