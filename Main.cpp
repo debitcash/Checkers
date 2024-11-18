@@ -20,8 +20,8 @@ int main(){
 	std::cout << "|  " <<  std::setw(65) << std::left <<  "Provide moves in the form row+col>row+col" <<" |" << std::endl;
 	std::cout << "|  " <<  std::setw(61) << std::left <<  "\teg. b3>c4" << " |" << std::endl;
 	std::cout << "|  " <<  std::setw(65) << std::left <<  "To perform multiple jump moves, enter the first set of" <<" |" << std::endl;
-	std::cout << "|  " <<  std::setw(65) << std::left <<  "coordinates, an ampersand (&), then the second set of coordinates." <<"|" << std::endl;
-	std::cout << "|  " <<  std::setw(61) << std::left <<  "\teg. b3>d5&d5>b7" <<" |" << std::endl;
+	std::cout << "|  " <<  std::setw(65) << std::left <<  "coordinates, a space " ", then the second set of coordinates." <<"|" << std::endl;
+	std::cout << "|  " <<  std::setw(61) << std::left <<  "\teg. b3>d &d5>b7" <<" |" << std::endl;
 	std::cout << "|********************************************************************|" << std::endl;
 	std::cout << "\t\tHave fun!" << std::endl << std::endl;
 
@@ -50,11 +50,26 @@ int main(){
 		}
 
 		std::cout << color << "'s turn." << std::endl;
-		//std::cout << "Provide a move in the form row+col>row+col\n\teg. b3>c4" << std::endl;
 		std::getline(std::cin, input);
 
 		board.attemptMove(input, turn);
+		board.display();
 	}
 
     return 0;
 }
+
+/*zach's test case
+*
+b3>c4
+c6>d5
+c2>b3
+g6>h5
+f3>g4
+h5>f3
+b3>a4
+f7>g6
+d1>c2
+d5>b3 b3>d1
+a4>b5
+*/

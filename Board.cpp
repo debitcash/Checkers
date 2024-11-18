@@ -4,6 +4,8 @@
 //allows for colour usability
 //#include <windows.h>
 
+void invertCoordinates(int& originRow, int& originCol, int& destRow, int& destCol);
+
 //parses a string into 2 pairs of ints
 std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > parseMove(const std::string& moves);
 
@@ -18,8 +20,7 @@ void Board::attemptMove(std::string input, int& turn)
     {
         this->move(moveSequence[0], turn);
     }
-        
-        
+
     else
     {
         // if multiple moves provided and they ALL are valid
@@ -52,7 +53,7 @@ void Board::attemptMove(std::string input, int& turn)
 //checks the sequence for valididty of moves(LOTS of duplicate code)
 bool Board::isSequenceValid(std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > >  sequence)
 {
-    //stores current piece on drigin coordinates
+    //stores current piece on origin coordinates
     Piece* chosenPiece = board[sequence[0].first.first][sequence[0].first.second];
     
     //for each coordinate pairs(orig, dest)
@@ -69,11 +70,14 @@ bool Board::isSequenceValid(std::vector<std::pair<std::pair<int, int>, std::pair
         
         if(chosenPiece->isBlackCheck())
         {
+            //inverting the board and coordinates so that they would work for black
             invertBoard();
-            destRow = 7 - destRow;
+            invertCoordinates(originRow, originCol, destRow, destCol);
+
+            /*destRow = 7 - destRow;
             destCol = 7 - destCol;
             originRow = 7 - originRow;
-            originCol = 7 - originCol;
+            originCol = 7 - originCol;*/
         }
         std::cout << "CHECK\n";
         // identifies when user tries to jump over nonexistent piece, or when tries to move 1 squareat time
@@ -107,19 +111,13 @@ bool Board::isSequenceValid(std::vector<std::pair<std::pair<int, int>, std::pair
         {
             invertBoard();
         }
-        
-        
-        
     }
-        
-    
-    
     return true;
 }
 
 
 //Going back to the idea that each class should only contain its own logic not the whole board logic.
-void Board::move(/*int originRow, int originCol, int destRow, int destCol,*/std::pair<std::pair<int, int>, std::pair<int, int> > move, int& turn)
+void Board::move(std::pair<std::pair<int, int>, std::pair<int, int> > move, int& turn)
 {
         
         int originRow = move.first.first;
@@ -164,13 +162,15 @@ void Board::move(/*int originRow, int originCol, int destRow, int destCol,*/std:
             {
                 if (chosenPiece->isBlackCheck())
                 {
+                    //inverting the board and coordinates so that they work for black
                     invertBoard();
+                    invertCoordinates(originRow, originCol, destRow, destCol);
 
-                    //inverting the coordinates so that they would work for black
+                    /*//inverting the coordinates so that they would work for black
                     destRow = 7 - destRow;
                     destCol = 7 - destCol;
                     originRow = 7 - originRow;
-                    originCol = 7 - originCol;
+                    originCol = 7 - originCol;*/
                 }
 
                 // check if trying to hop over empty square
@@ -201,12 +201,13 @@ void Board::move(/*int originRow, int originCol, int destRow, int destCol,*/std:
                 if (chosenPiece->isBlackCheck())
                 {
                     invertBoard();
+                    invertCoordinates(originRow, originCol, destRow, destCol);
 
-                    // inverting back to normal coordinates
+                    /*// inverting back to normal coordinates
                     destRow = 7 - destRow;
                     destCol = 7 - destCol;
                     originRow = 7 - originRow;
-                    originCol = 7 - originCol;
+                    originCol = 7 - originCol;*/
                 }
 
                 // assign the piece to new location and empty the previous location
@@ -227,9 +228,7 @@ void Board::move(/*int originRow, int originCol, int destRow, int destCol,*/std:
                     chosenPiece->setOriginRow(7 - destRow);
                 }
             
-            this->display();
-
-            
+            //this->display();
         }
 
         else
@@ -244,7 +243,6 @@ void Board::move(/*int originRow, int originCol, int destRow, int destCol,*/std:
 //inverts the board so that red and black moves can be handled the same way
 void Board::invertBoard()
 {
-
     for (int row = 0; row < 4; row++)
     {
         for (int column = 0; column < 8; column++)
@@ -261,8 +259,7 @@ void Board::invertBoard()
 	}
 }
 
-void Board::display()
-        {
+void Board::display() const {
             for (int y = 0; y < 8; y++)
             {
                 std::cout << y + 1 << " | ";
@@ -351,7 +348,7 @@ bool Board::checkForError(int originRow, int originCol, int destRow, int destCol
     //the destination location has a piece at it already
     if(board[destRow][destCol] != nullptr)
     {
-        std::cout << "This destination is already occupied. Try another destination.";
+        std::cout << "This destination is already occupied. Try another destination." << std::endl;
         error = true;
     }
 
@@ -372,6 +369,14 @@ bool Board::checkForError(int originRow, int originCol, int destRow, int destCol
     return error;
 
 }
+//inverts the coordinates so that red and black moves can be handled in the same way
+void invertCoordinates(int& originRow, int& originCol, int& destRow, int& destCol) {
+    destRow = 7 - destRow;
+    destCol = 7 - destCol;
+    originRow = 7 - originRow;
+    originCol = 7 - originCol;
+}
+
 
 //parses the inputted string into 2 pairs of ints. the first pair is the initial row & col, second is the destination row & col
 std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > parseMove(const std::string& moves)

@@ -17,7 +17,7 @@ bool KingChecker::isValidMove(int destRow, int destCol)
 {
     bool validMove; 
 
-    //Keeping the orginally moving up rule.
+    //Keeping the originally moving up rule.
 
 
     //Calculating the value between the origin and destination coordinates.

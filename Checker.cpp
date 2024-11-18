@@ -15,7 +15,10 @@ Checker::Checker() : Piece(){};
 //Parameterized constructor. Calls parent class's constructor (piece)
 Checker::Checker(bool newColour, bool newStatus, int newRow, int newCol) : Piece(newColour, newStatus, newRow, newCol) {}
 
+//*************************************************************************************
 
+
+//*************************************************************************************
 bool Checker::isValidMove(int destRow, int destCol /*, Piece* board[8][8]*/) {
 
     bool validMove;

@@ -2,6 +2,8 @@
 #include "Checker.h"
 #include "Piece.h"
 
+#include <vector>
+
 
 #ifndef BOARD_H
 #define BOARD_H
@@ -35,7 +37,7 @@ public:
 
     void invertBoard();
 
-    void display();
+    void display() const;
     
     bool isSequenceValid(std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > sequence);
 
