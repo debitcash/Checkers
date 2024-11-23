@@ -2,6 +2,12 @@
 #include "Board.cpp"
 #include "Checker.cpp"
 #include "Piece.cpp"
+#include "Game.cpp"
+
+/*#include "Board.h"
+#include "Checker.h"
+#include "Piece.h"
+#include "Game.h"*/
 
 #include "Board.h"
 #include <iomanip>
@@ -25,36 +31,16 @@ int main(){
 	std::cout << "|********************************************************************|" << std::endl;
 	std::cout << "\t\tHave fun!" << std::endl << std::endl;
 
-	//consider having player enter moves individually (specifically for double jump/ triple jump moves) this
-	//would make it so that board and piece class only have to consider cases of single moves, and just get multiple
-	//of them in a row
+	Game game;
 
-	Board board;
-
-    // start with red(red - odd, black - even)
-    // red at bottom black at top
-    int turn = 1; 
-    
-    board.display();
-
-	bool cont = true;
-	std::string color;
-	std::string input;
-
-	while(cont) {
-
-		if(turn % 2 == 0) {
-			color = "Black";
-		}else {
-			color = "Red";
-		}
-
-		std::cout << color << "'s turn." << std::endl;
-		std::getline(std::cin, input);
-
-		board.attemptMove(input, turn);
-		board.display();
+	//continue playing the game until end game status is reached
+	while(!game.endGame()) {
+		game.play();
 	}
+
+	std::cout << "Congrats " << game.currentColor() << "! " << std::endl;
+	std::cout << "You won the game in " << game.getTurn() << " moves." << std::endl;
+	std::cout << std::endl << "Thanks for playing" << std::endl;
 
     return 0;
 }

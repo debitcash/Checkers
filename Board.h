@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Checker.h"
 #include "Piece.h"
+#include "Game.h"
 
 #include <vector>
 
@@ -9,6 +10,8 @@
 #define BOARD_H
 
 class Board {
+
+    friend class Game;
 
 private:
     // declare the board and initialize the board values
@@ -28,7 +31,6 @@ private:
             new Checker(true, false, 7 - 6, 7 - 5), nullptr, new Checker(true, false, 7 - 6, 7 - 7)},
         {new Checker(true, false, 7 - 7, 7 - 0), nullptr, new Checker(true, false, 7 - 7, 7 - 2), nullptr,
             new Checker(true, false, 7 - 7, 7 - 4), nullptr, new Checker(true, false, 7 - 7, 7 - 6), nullptr}}; // black pieces
-
 
 public:
     void move(/*int originRow, int originCol, int destRow, int destCol,*/std::pair<std::pair<int, int>, std::pair<int, int> > move, int& turn);
