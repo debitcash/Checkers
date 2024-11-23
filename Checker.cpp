@@ -37,8 +37,11 @@ bool Checker::isValidMove(int destRow, int destCol /*, Piece* board[8][8]*/) {
     
     //std::cout <<originRow <<originCol << " " << destRow<<destRow;
     //calculating the angle between the origin and destination coordinate
+    
+    
     int value = std::abs(std::round(atan2 (destRow - originRow,destCol - originCol) * 180 / PI));
-
+    
+    
     //Making sure it's a diagonal move
     if (value == 45 || value == 135 ) {
         
@@ -68,7 +71,9 @@ bool Checker::isValidMove(int destRow, int destCol /*, Piece* board[8][8]*/) {
            validMove = true; 
         }*/
     }
-    else {
+    else 
+    {
+        //std::cout << "The move is not valid for a checker.(identified by checker class, for debug)" << std::endl;
         validMove = false;
     }
 

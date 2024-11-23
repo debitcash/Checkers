@@ -9,235 +9,161 @@ void invertCoordinates(int& originRow, int& originCol, int& destRow, int& destCo
 //parses a string into 2 pairs of ints
 std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > parseMove(const std::string& moves);
 
-// distinguishing between multiplehops and jus one move here
+// distinguishing between multiple hops and single square move, then attempt to do the move
 void Board::attemptMove(std::string input, int& turn)
 {
-    // store multiple hops here, provided by parse function
+    // store the entered moves, provided by parse function. Can be either 1 move, or multiple hops
     std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > moveSequence = parseMove(input);
+
+    // get coordinates of first move in the from the entered sequence
+    int originRow = moveSequence[0].first.first;
+    int originCol = moveSequence[0].first.second;
+    int destRow = moveSequence[0].second.first;
+    int destCol = moveSequence[0].second.second;
     
-    // do regular move if only one move/hop provided
-    if (moveSequence.size() == 1)
+    // get the element that is selected for a move
+    Piece* chosenPiece = board[originRow][originCol];
+    
+    // check if any errors are associated with the first in sequence (or only one) move
+    if (checkForError(originRow, originCol, destRow, destCol, turn, board[originRow][originCol]))
     {
-        this->move(moveSequence[0], turn);
+        return ;
     }
 
+    bool isBlack = chosenPiece->isBlackCheck();
+
+    if(isBlack)
+    {
+        invertBoard();
+        invertCoordinates(originRow, originCol, destRow, destCol);
+    }
+    
+    // do regular move if only one square move provided, or a sequence where the first move is one square move
+    // don't care about the next move, because only hops can be in multiple moves sequence
+    if (originRow + 1 == destRow  &&  chosenPiece->isValidMove(destRow, destCol ))
+    {
+        // provide new locations for the moved checker
+        board[destRow][destCol] = board[originRow][originCol];
+        board[originRow][originCol] = nullptr;
+        
+        // provide the new coordinates for a piece
+        board[destRow][destCol]->setOriginCol(destCol);
+        board[destRow][destCol]->setOriginRow(destRow);
+    }
+    
+    // process when there were more that one hop provided
     else
     {
-        // if multiple moves provided and they ALL are valid
-        if (isSequenceValid(moveSequence))
+        // create variables that are going to track whether the moves actually follow a chain of one piece movement
+        // otherwise, user will be able to move two different pieces at same time
+        int previousHopRow = -1;
+        int previousHopCol = -1;
+        
+        for (std::pair<std::pair<int, int>, std::pair<int, int> > coordinates : moveSequence)
         {
-            // for each move in a sequence do it with our regular move function
-            for (std::pair<std::pair<int, int>, std::pair<int, int> >  coordinates : moveSequence)
+            // get coordinates for the move from movesequence
+            int originRow = coordinates.first.first;
+            int originCol = coordinates.first.second;
+            int destRow = coordinates.second.first;
+            int destCol = coordinates.second.second;
+            
+            // invert coordinates for black piece, because they are updated every time a new move is taken from hop sequence
+            if(isBlack)
             {
-                std::cout << "Checking coordinates \n"; 
-                this->move(coordinates, turn);
-                // minus turn, because move function increments the turn after its done
-                turn--;
+                invertCoordinates(originRow, originCol, destRow, destCol);
             }
             
-            turn++;
-        }
-        else
-            std::cout << "Sequence is invalid, try other path \n"; 
-        
-    }
-    
-    
-    
-    // if sucessfully moved the piece continue to next player
-    //if (board[moveSequence[0].first.first][moveSequence[0].first.second] == nullptr)
-      //  turn++;
-    
-}
-
-//checks the sequence for valididty of moves(LOTS of duplicate code)
-bool Board::isSequenceValid(std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > >  sequence)
-{
-    //stores current piece on origin coordinates
-    Piece* chosenPiece = board[sequence[0].first.first][sequence[0].first.second];
-    
-    //for each coordinate pairs(orig, dest)
-    for (std::pair<std::pair<int, int>, std::pair<int, int> >  coordinates : sequence)
-    {
-        
-        int originRow = coordinates.first.first;
-        int originCol = coordinates.first.second;
-        int destRow = coordinates.second.first;
-        int destCol = coordinates.second.second;
-        
-        
-        //Piece* chosenPiece = board[originRow][originCol];
-        
-        if(chosenPiece->isBlackCheck())
-        {
-            //inverting the board and coordinates so that they would work for black
-            invertBoard();
-            invertCoordinates(originRow, originCol, destRow, destCol);
-
-            /*destRow = 7 - destRow;
-            destCol = 7 - destCol;
-            originRow = 7 - originRow;
-            originCol = 7 - originCol;*/
-        }
-        std::cout << "CHECK\n";
-        // identifies when user tries to jump over nonexistent piece, or when tries to move 1 squareat time
-        // the detection of one square movement appeared like a bug, because the curent calculation gonna give the location of a square that can never contain a piece
-        //which is a good thing for this case, as far as we are trying to not let single square moves in sequence moves; but just keep that in mind
-        if (board[(destRow + originRow) / 2][(destCol + originCol) / 2] == nullptr)
-        {
-            std::cout << "Don't try to hop over nothing, or attempt single moves in a hop sequence.\n";
-            if(chosenPiece->isBlackCheck())
+            // if piece is not just starting, or  not following the move chain, let the user do only first valid move
+            if (!((originRow == previousHopRow && originCol == previousHopCol) || (previousHopRow == -1 && previousHopCol == -1)))
             {
-                invertBoard();
-            }
-            
-            return false;
-        }
-        
-        // check if hopping over the same color
-        if (originRow + 2 == destRow && board[(destRow + originRow) / 2][(destCol + originCol) / 2]->isBlackCheck() == chosenPiece->isBlackCheck())
-        {
-            std::cout << "Can't take out same colors\n"; 
-            if(chosenPiece->isBlackCheck())
-            {
-                invertBoard();
-            }
-            return false;
-        }
-        //else if(originRow + 1 ==destRow)
-          //  return false;
-        
-        if(chosenPiece->isBlackCheck())
-        {
-            invertBoard();
-        }
-    }
-    return true;
-}
-
-
-//Going back to the idea that each class should only contain its own logic not the whole board logic.
-void Board::move(std::pair<std::pair<int, int>, std::pair<int, int> > move, int& turn)
-{
-        
-        int originRow = move.first.first;
-        int originCol = move.first.second;
-        int destRow = move.second.first;
-        int destCol = move.second.second;
-
-        bool valid = true;
-        Piece* chosenPiece;
-
-        //Allowing the chosen "Piece to be put at the origin"
-        if (board[originRow][originCol] != nullptr)
-            chosenPiece = board[originRow][originCol];
-        else
-        {
-            std::cout << "There is no piece at the chose location." << std::endl;
-            return;
-        }
-
-        //checking for various errors with the coordinate input
-        if(checkForError(originRow,originCol, destRow, destCol, turn, chosenPiece)) {
-            return;
-        }
-
-        //if the chosen piece is black, invert the board
-        if(chosenPiece->isBlackCheck())
-        {
-            //invert the origin and dest rows/cols
-            invertBoard();
-            valid = chosenPiece->isValidMove(7 - destRow, 7 - destCol /*, board*/);
-            //revert the origin and dest rows/cols
-            invertBoard();
-        }else{
-            valid = chosenPiece->isValidMove(destRow, destCol /*,board*/);
-        }
-
-        //The idea behind this move function is that the board will actually move and think about the other pieces on the board.
-        //The pieces will just provide the logic of what they know, this will allow less coupling with other pieces.
-        if(valid == true)
-        {
-            // destination is not null(because checked previously), so we can straight away move the piece and capture the attacked piece
-            {
-                if (chosenPiece->isBlackCheck())
-                {
-                    //inverting the board and coordinates so that they work for black
-                    invertBoard();
-                    invertCoordinates(originRow, originCol, destRow, destCol);
-
-                    /*//inverting the coordinates so that they would work for black
-                    destRow = 7 - destRow;
-                    destCol = 7 - destCol;
-                    originRow = 7 - originRow;
-                    originCol = 7 - originCol;*/
-                }
-
-                // check if trying to hop over empty square
-                if (board[(destRow + originRow) / 2][(destCol + originCol) / 2] == nullptr && destRow == originRow + 2)
-                {
-                    std::cout << "Can't hop over nothing\n";
-                    if (chosenPiece->isBlackCheck())
-                    {
-                        invertBoard();
-                    }
-                    return;
-                }
-                    
+                std::cout << "You are attempting to move different pieces at same time, only first move was executed." << std::endl;
                 
-                // if capturing move, delete the opposing piece
-                // doublecheck if piece to be captured is of opposing color
-                if (originRow + 2 == destRow && board[(destRow + originRow) / 2][(destCol + originCol) / 2]->isBlackCheck() != chosenPiece->isBlackCheck())
-                {
-                    delete board[(destRow + originRow) / 2][(destCol + originCol) / 2];
-                    board[(destRow + originRow) / 2][(destCol + originCol) / 2] = nullptr;
-                }
-                else if ((originRow + 2 == destRow && board[(destRow + originRow) / 2][(destCol + originCol) / 2]->isBlackCheck() == chosenPiece->isBlackCheck()))
-                {
-                    std::cout << "Can not capture same color piece. Try again";
-                    return;
-                }
-
-                if (chosenPiece->isBlackCheck())
-                {
+                if(chosenPiece->isBlackCheck())
                     invertBoard();
-                    invertCoordinates(originRow, originCol, destRow, destCol);
-
-                    /*// inverting back to normal coordinates
-                    destRow = 7 - destRow;
-                    destCol = 7 - destCol;
-                    originRow = 7 - originRow;
-                    originCol = 7 - originCol;*/
-                }
-
-                // assign the piece to new location and empty the previous location
-                board[destRow][destCol] = board[originRow][originCol];
-
-                // reset the pointer to null
-                board[originRow][originCol] = nullptr;
+                    
+                return ;
             }
-
-            // display the board after move was made
             
-            chosenPiece->setOriginCol(destCol);
-            chosenPiece->setOriginRow(destRow);
+            // checking for errors, because new coordinates are provided for each new hop
+            if (checkForError(originRow, originCol, destRow, destCol, turn, chosenPiece))
+            {
+                if(chosenPiece->isBlackCheck())
+                    invertBoard();
+                return ;
+            }
             
-            if (chosenPiece->isBlackCheck())
-                {
-                    chosenPiece->setOriginCol(7 - destCol);
-                    chosenPiece->setOriginRow(7 - destRow);
-                }
+            // do captureMoveCheck
+            if (!captureMoveCheck(originRow, originCol, destRow, destCol, turn))
+            {
+                if(chosenPiece->isBlackCheck())            
+                    invertBoard();
+                return;
+            }
             
-            //this->display();
+            // do the cleanup of captured piece after the hop
+            delete board[(destRow + originRow) / 2][(destCol + originCol) / 2];
+            board[(destRow + originRow) / 2][(destCol + originCol) / 2] = nullptr;
+            
+            // update location of the hopping piece
+            board[destRow][destCol] = board[originRow][originCol];
+            board[originRow][originCol] = nullptr; 
+            
+            // set new coordinates in the hopping piece
+            board[destRow][destCol]->setOriginCol(destCol);
+            board[destRow][destCol]->setOriginRow(destRow);
+            
+            // update the markers to track the hopping path
+            previousHopRow = destRow;
+            previousHopCol = destCol;
         }
+    }
 
-        else
-        {
-            std::cout << "This move isn't valid, please try again." << std::endl;
-            return;
-        }
+    // invert the board back to return to original board orientation
+    if(isBlack)
+    {
+        invertBoard();
+    }
+    
+    // proceed to next turn
+    turn++;
+}
+
+// checks the hop move
+bool Board::captureMoveCheck(int originRow, int originCol, int destRow, int destCol, int& turn)
+{
+    // piece to be checked
+    Piece* chosenPiece = board[originRow][originCol];
+    
+    // check by overloaded checker class member function
+    if (!chosenPiece->isValidMove(destRow, destCol))
+    {
+        std::cout << "Wrong move for a checker, detected in checker member function" << std::endl;
+        return false;
+    }
         
+    // check if user tries to do a single move after a hop
+    if (destRow == originRow + 1)
+    {
+        std::cout << "Don't attempt single moves in a hop sequence, only hop move was made.\n";
         turn++;
+        return false;
+    }
+    
+    // check if user tries to jump over empty square
+    if (board[(destRow + originRow) / 2][(destCol + originCol) / 2] == nullptr)
+    {
+        std::cout << "Don't try to hop over nothing\n";
+        return false;
+    }
+        
+    // check if user tries to capture a same color piece
+    if (originRow + 2 == destRow && board[(destRow + originRow) / 2][(destCol + originCol) / 2]->isBlackCheck() == chosenPiece->isBlackCheck())
+    {
+        std::cout << "Can't capture same colors" << std::endl; 
+        return false;
+    }
+    
+    return true;
 }
 
 //inverts the board so that red and black moves can be handled the same way
@@ -321,54 +247,59 @@ void Board::display()
 }
 */
 
-bool Board::checkForError(int originRow, int originCol, int destRow, int destCol, const int& turn, const Piece* chosenPiece) {
-    bool error = false;
-
+bool Board::checkForError(int originRow, int originCol, int destRow, int destCol, const int& turn, const Piece* chosenPiece) 
+{
     //origin location outside of board
     if (originRow > 7 || originRow < 0 || originCol > 7 || originCol < 0 )
     {
         std::cout << "The origin location is outside the board boundary, choose a valid origin." << std::endl;
-        error = true;
+        return true;
     }
 
     //destination location outside board
     else if (destRow > 7 || destRow < 0 || destCol > 7 || destCol < 0)
     {
         std::cout << "The chosen destination is outside the board boundary, choose a valid destination." << std::endl;
-        error = true;
+        return true;
     }
 
     //origin and destination are the same
     else if (destRow == originRow && destCol == originCol)
     {
         std::cout << "You provided the same coordinates, they have to be different." << std::endl;
-        error = true;
+        return true;
     }
-
+    
     //the destination location has a piece at it already
     if(board[destRow][destCol] != nullptr)
     {
         std::cout << "This destination is already occupied. Try another destination." << std::endl;
-        error = true;
+        return true;
     }
-
+    
+    if(chosenPiece == nullptr)
+    {
+        std::cout << "You have chosen an empty square." << std::endl;
+        return true;
+    }
+    
     //Attempting to move black piece on red's turn
     if (turn % 2 != 0 && chosenPiece->isBlackCheck())
     {
         std::cout << "Not your turn! Move red pieces now." << std::endl;
-        error = true;
+        return true;
     }
 
     //Attempting to move red piece on black's turn
     else if (turn % 2 == 0 && !chosenPiece->isBlackCheck())
     {
         std::cout << "Not your turn! Move black pieces now." << std::endl;
-        error = true;
+        return true;
     }
-
-    return error;
-
+    
+    return false;
 }
+
 //inverts the coordinates so that red and black moves can be handled in the same way
 void invertCoordinates(int& originRow, int& originCol, int& destRow, int& destCol) {
     destRow = 7 - destRow;

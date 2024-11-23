@@ -1,7 +1,7 @@
 //my compiler can't handle having the .cpp files included, only the .h. yours seems the opposite?
-//include "Board.cpp"
-//#include "Checker.cpp"
-//#include "Piece.cpp"
+#include "Board.cpp"
+#include "Checker.cpp"
+#include "Piece.cpp"
 
 #include "Board.h"
 #include <iomanip>

@@ -42,6 +42,8 @@ public:
     bool isSequenceValid(std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > sequence);
 
     bool checkForError(int originRow, int originCol, int destRow, int destCol, const int& turn, const Piece* chosenPiece);
+    
+    bool captureMoveCheck(int originRow, int originCol, int destRow, int destCol, int& turn);
 
 };
 
