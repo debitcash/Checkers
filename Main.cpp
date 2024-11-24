@@ -1,14 +1,4 @@
 //my compiler can't handle having the .cpp files included, only the .h. yours seems the opposite?
-#include "Board.cpp"
-#include "Checker.cpp"
-#include "Piece.cpp"
-#include "Game.cpp"
-
-/*#include "Board.h"
-#include "Checker.h"
-#include "Piece.h"
-#include "Game.h"*/
-
 #include "Board.h"
 #include <iomanip>
 
@@ -46,7 +36,6 @@ int main(){
 }
 
 /*zach's test case
-*
 b3>c4
 c6>d5
 c2>b3

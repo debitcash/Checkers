@@ -4,11 +4,7 @@
 #include "Piece.h"
 
 class King : public Piece
-{
-	private: 
-	    int originRow;
-	    int originCol;
-    
+{    
     public:
     	bool isValidMove(int, int, Piece* board[8][8]);
     	

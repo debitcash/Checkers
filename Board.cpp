@@ -1,6 +1,7 @@
 #include "Board.h"
 #include <vector>
 #include <sstream>
+#include <typeinfo>
 //allows for colour usability
 //#include <windows.h>
 
@@ -49,8 +50,27 @@ void Board::attemptMove(std::string input, int& turn)
         // provide the new coordinates for a piece
         board[destRow][destCol]->setOriginCol(destCol);
         board[destRow][destCol]->setOriginRow(destRow);
+        
+        std::cout << "The piece has moved to row " << destRow << " and the column moved to " << destCol << std::endl;
+        
+        checkPromotion(destRow,destCol);
     }
     
+    //For the KingChecker movement. 
+    else if (originRow - 1 == destRow && chosenPiece-> isValidMove(destRow, destCol) && typeid(*chosenPiece) == typeid(KingChecker) )
+    {
+        // provide new location for the moved checker
+        board[destRow][destCol] = board[originRow][originCol];
+        board[originRow][originCol] = nullptr;
+        
+        // provide the new coordinates for a piece
+        board[destRow][destCol]->setOriginCol(destCol);
+        board[destRow][destCol]->setOriginRow(destRow);
+        
+        std::cout << "This piece has moved to row " << destRow << " and the column moved to" << destCol <<std::endl;
+        
+        //Don't need to check promotion for KingChecker since they can move only backwards 
+    }
     // process when there were more that one hop provided
     else
     {
@@ -112,6 +132,12 @@ void Board::attemptMove(std::string input, int& turn)
             board[destRow][destCol]->setOriginCol(destCol);
             board[destRow][destCol]->setOriginRow(destRow);
             
+            
+            std::cout << "The piece has moved to row " << destRow << " and the column moved to " << destCol << std::endl;
+
+            
+            checkPromotion(destRow,destCol);
+            
             // update the markers to track the hopping path
             previousHopRow = destRow;
             previousHopCol = destCol;
@@ -149,7 +175,16 @@ bool Board::captureMoveCheck(int originRow, int originCol, int destRow, int dest
         return false;
     }
     
+    //Check if it is going backwards. (King Movement)
+    if (destRow == originRow - 1)
+    {
+        std::cout << "Don't attempt single moves in a hop sequence, only hop was made. \n";
+        turn++; 
+        return false; 
+    }
+    
     // check if user tries to jump over empty square
+    //Note might not work for KingChecker due to it being able to just move 
     if (board[(destRow + originRow) / 2][(destCol + originCol) / 2] == nullptr)
     {
         std::cout << "Don't try to hop over nothing\n";
@@ -352,4 +387,37 @@ std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > parseMove(con
         
      return parsedMoves;
 }
+
+void Board::checkPromotion(int originRow, int originCol)
+{
+    
+    Piece* piece = board[originRow][originCol];
+    
+    //Had to cast or else I couldn't get the promotion() function to work as it would take as a piece 
+    //Which doesn't have the promotion, I kept the promotion to checker only because it doesn't make sense
+    //For the other piece (KingChecker) to inherit the promotion since it is already promoted. 
+    Checker* checker = dynamic_cast<Checker*>(piece);
+    
+
+    if (checker != nullptr && checker -> promotion())
+    {
+        bool colourKeeper;
+        bool statusKeeper;
+        
+        colourKeeper = checker -> isBlackCheck();
+        statusKeeper = checker -> isCapturedCheck();
+        
+        delete checker;
+        board[originRow][originCol] = nullptr;
+        
+        
+        board[originRow][originCol] = new KingChecker(colourKeeper,statusKeeper, originRow, originCol);
+        
+        std::cout << "Checker has been promoted to KingChecker" << std::endl;
+        
+    }
+}
+
+
+
 
