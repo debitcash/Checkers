@@ -6,6 +6,8 @@
 class KingChecker : public Piece
 {
 
+    public:
+    
     KingChecker();
 
     KingChecker(bool colour, bool capturedStatus, int originRow, int originCol);

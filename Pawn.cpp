@@ -5,10 +5,10 @@
        //New Constructors
 
        //Default 
-       Pawn::Pawn() : Piece(), originRow(0), originCol(0) {}
+       Pawn::Pawn() : Piece() {}
 
        //Parameterized 
-       Pawn::Pawn(bool newColour, bool newStatus, int newRow, int newCol) : Piece(newColour, newStatus), originRow(newRow),originCol(newCol) {}
+       Pawn::Pawn(bool newColour, bool newStatus, int newRow, int newCol) : Piece(newColour, newStatus, newRow, newCol) {}
 
         //check if move is valid(move forward only, can move in diagonal if capturing opposing color pieces)
        bool Pawn::isValidMove(int destRow, int destCol, Piece* board[8][8]) 

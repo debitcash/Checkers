@@ -5,10 +5,6 @@
 class Pawn : public Piece
 //This is the header file for the Pawn class.
 {
-    private: 
-    int originRow;
-    int originCol;
-
     public:
     //Overloaded function to check whether it is a valid move or not.
     bool isValidMove(int, int, Piece* board[8][8]);

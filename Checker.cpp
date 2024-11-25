@@ -10,10 +10,10 @@
 //Checker Implementation class
 
 //Default constructor
-Checker::Checker() : Piece(){};
+Checker::Checker() : Piece() {};
 
 //Parameterized constructor. Calls parent class's constructor (piece)
-Checker::Checker(bool newColour, bool newStatus, int newRow, int newCol) : Piece(newColour, newStatus, newRow, newCol) {}
+Checker::Checker(bool newColour, bool newStatus, int newRow, int newCol, bool newPromotion) : Piece(newColour, newStatus, newRow, newCol), isPromoted(newPromotion) {}
 
 bool Checker::isValidMove(int destRow, int destCol /*, Piece* board[8][8]*/) {
 
@@ -83,3 +83,40 @@ Checker::~Checker() {
     std::cout << "Checker has been captured." << std::endl;
 }
 
+
+/*bool Checker::promotion()
+{
+    if (originRow == 7)
+    {
+        if (this -> isBlackCheck() == false)
+        {
+            return isPromoted = true;
+        }
+        else if (this -> isBlackCheck() == true)
+        {
+            return isPromoted = true;
+        }
+        else 
+        {
+            return isPromoted = false;
+        }
+
+        return isPromoted; 
+    }
+}*/
+
+bool Checker::promotion()
+{
+    if( originRow == 7)
+    {
+        return true; 
+    }
+    
+    return false; 
+}
+
+
+bool Checker::getPromotionCheck()
+{
+    return isPromoted;
+}

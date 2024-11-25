@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-King::King(bool newColour, bool newStatus, int newRow, int newCol) :  Piece(newColour, newStatus), originRow(newRow),originCol(newCol) {}
+King::King(bool newColour, bool newStatus, int newRow, int newCol) :  Piece(newColour, newStatus, newRow, newCol) {}
     	
 bool King::isValidMove(int destRow, int destCol, Piece* board[8][8]) 
 	   {

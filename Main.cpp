@@ -4,7 +4,8 @@
 #include "Piece.cpp"
 #include "Game.cpp"
 #include "User.cpp"
-*/
+#include "KingChecker.cpp"*/
+
 #include "Board.h"
 #include "Checker.h"
 #include "Piece.h"
@@ -69,7 +70,6 @@ int main(){
 }
 
 /*zach's test case
-*
 b3>c4
 c6>d5
 c2>b3
