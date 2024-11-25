@@ -25,12 +25,18 @@ private:
             nullptr, new Checker(false, false, 2, 5), nullptr, new Checker(false, false, 2, 7)},
         {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
         {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
-        {new Checker(true, false, 7 - 5, 7 - 0), nullptr, new Checker(true, false, 7 - 5, 7 - 2), nullptr,
-            new Checker(true, false, 7 - 5, 7 - 4), nullptr, new Checker(true, false, 7 - 5, 7 - 6), nullptr},
-        {nullptr, new Checker(true, false, 7 - 6, 7 - 1), nullptr, new Checker(true, false, 7 - 6, 7 - 3), nullptr,
+        {new Checker(true, false, 7 - 5, 7 - 0), nullptr, nullptr/*new Checker(true, false, 7 - 5, 7 - 2)*/, nullptr,
+            nullptr/*new Checker(true, false, 7 - 5, 7 - 4)*/, nullptr, nullptr/*new Checker(true, false, 7 - 5, 7 - 6)*/, nullptr},
+        
+        {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
+        {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr}};    
+            
+            
+            
+        /*{nullptr, new Checker(true, false, 7 - 6, 7 - 1), nullptr, new Checker(true, false, 7 - 6, 7 - 3), nullptr,
             new Checker(true, false, 7 - 6, 7 - 5), nullptr, new Checker(true, false, 7 - 6, 7 - 7)},
         {new Checker(true, false, 7 - 7, 7 - 0), nullptr, new Checker(true, false, 7 - 7, 7 - 2), nullptr,
-            new Checker(true, false, 7 - 7, 7 - 4), nullptr, new Checker(true, false, 7 - 7, 7 - 6), nullptr}}; // black pieces
+            new Checker(true, false, 7 - 7, 7 - 4), nullptr, new Checker(true, false, 7 - 7, 7 - 6), nullptr}}; // black pieces*/
 
 public:
     void move(/*int originRow, int originCol, int destRow, int destCol,*/std::pair<std::pair<int, int>, std::pair<int, int> > move, int& turn);

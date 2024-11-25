@@ -3,7 +3,7 @@
 #define GAME_H
 
 #include "Board.h"
-
+#include "User.h"
 
 
 class Game {
@@ -22,6 +22,8 @@ public:
     int getTurn() const;
 
     std::string currentColor() const;
+    
+    void updateStats(User winner, User loser);
 
     ~Game();
 };

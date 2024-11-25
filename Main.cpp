@@ -1,13 +1,14 @@
 //my compiler can't handle having the .cpp files included, only the .h. yours seems the opposite?
-#include "Board.cpp"
+/*#include "Board.cpp"
 #include "Checker.cpp"
 #include "Piece.cpp"
 #include "Game.cpp"
-
-/*#include "Board.h"
+#include "User.cpp"
+*/
+#include "Board.h"
 #include "Checker.h"
 #include "Piece.h"
-#include "Game.h"*/
+#include "Game.h"
 
 #include "Board.h"
 #include <iomanip>
@@ -32,15 +33,37 @@ int main(){
 	std::cout << "\t\tHave fun!" << std::endl << std::endl;
 
 	Game game;
+    
+    std::string name1,name2;
+    
+    std::cout << "Provide the name of first player: " << std::endl;
+    std::getline(std::cin, name1);
+    std::cout << "Provide the name of second player: " << std::endl;
+    std::getline(std::cin, name2);
+    
+    User user1(name1);
+    User user2(name2);
 
 	//continue playing the game until end game status is reached
 	while(!game.endGame()) {
 		game.play();
 	}
 
-	std::cout << "Congrats " << game.currentColor() << "! " << std::endl;
+	/*std::cout << "Congrats " << game.currentColor() << "! " << std::endl;
 	std::cout << "You won the game in " << game.getTurn() << " moves." << std::endl;
+	std::cout << std::endl << "Thanks for playing" << std::endl;*/
+    
+    std::cout << game.currentColor() << " lost! " << std::endl;
+	std::cout << "The game lasted " << game.getTurn() << " moves." << std::endl;
 	std::cout << std::endl << "Thanks for playing" << std::endl;
+    
+    // recording the info from this game into a file
+    // the first user parameter in the function call is a winner
+    if (game.currentColor() == "Black")
+        game.updateStats(user1, user2);
+    else
+        game.updateStats(user2, user1);
+    
 
     return 0;
 }

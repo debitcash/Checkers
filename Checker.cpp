@@ -39,12 +39,12 @@ bool Checker::isValidMove(int destRow, int destCol /*, Piece* board[8][8]*/) {
 
     return validMove;
 
-    /*else if((originRow + 2 == destRow) /*&& (originCol + 2 == destCol) || (originCol - 2 == destCol)#1# ){
+    /*else if((originRow + 2 == destRow) && (originCol + 2 == destCol) || (originCol - 2 == destCol)#1# ){
             //An interesting math concept is that the average of the two points are the midpoint
             //Because you are getting the "middle" of x and y, so we should be able to use the midpoint.
             //And with the midpoint, we can see if there is a checker inbetween it so that can modify it.
 
-            /*int midRow = ((destRow + originRow)/2);
+            int midRow = ((destRow + originRow)/2);
             int midCol = ((destCol + originCol)/2);
 
             if(board[midRow][midCol] != nullptr)
