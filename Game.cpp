@@ -97,11 +97,15 @@ void Game::updateStats(User winner, User loser)
     if (!foundWinner)
     {
         updatedRecords.push_back(winner.getName() + " " + "1" + " " + "0");
+        winner.setWins(1);
+        winner.setLosses(0);
     }
     
     if (!foundLoser)
     {
         updatedRecords.push_back(loser.getName() + " " + "0" + " " + "1");
+        winner.setWins(0);
+        winner.setLosses(1);
     }
     
     // close records for reading
