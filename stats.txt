@@ -1,6 +1,14 @@
-Adam 5 1
-Brian 1 2
+Adam 6 1
+Brian 2 4
 Cynthia 0 1
 Elon 6 2
 Dylan 2 6
-Tony 0 1
+Tony 0 5
+Fedor 3 0
+Anna 1 0
+Arujan 1 0
+Brad 0 1
+Olivia 1 0
+Spenny 0 1
+Tim 2 0
+Dana 0 2

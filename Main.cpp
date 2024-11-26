@@ -1,4 +1,3 @@
-//my compiler can't handle having the .cpp files included, only the .h. yours seems the opposite?
 /*#include "Board.cpp"
 #include "Checker.cpp"
 #include "Piece.cpp"
@@ -10,12 +9,13 @@
 #include "Checker.h"
 #include "Piece.h"
 #include "Game.h"
-
-#include "Board.h"
 #include <iomanip>
+
+// file that contaings control flow for main  logic
 
 int main(){
 
+    // welcome the use and display game instructions
 	std::cout << "\t\tWelcome to checkers!" << std::endl;
 	std::cout << "|********************************************************************|" << std::endl;
 	std::cout << "|  " <<  std::setw(65) << std::left <<  "Checkers is a two-player game, where each player moves pieces" <<" |" << std::endl;
@@ -33,15 +33,19 @@ int main(){
 	std::cout << "|********************************************************************|" << std::endl;
 	std::cout << "\t\tHave fun!" << std::endl << std::endl;
 
+    // create game object
 	Game game;
     
+    // variables to store user's name
     std::string name1,name2;
     
+    // take user input
     std::cout << "Provide the name of first player: " << std::endl;
     std::getline(std::cin, name1);
     std::cout << "Provide the name of second player: " << std::endl;
     std::getline(std::cin, name2);
     
+    // provide user input to user objects
     User user1(name1);
     User user2(name2);
 
@@ -49,11 +53,8 @@ int main(){
 	while(!game.endGame()) {
 		game.play();
 	}
-
-	/*std::cout << "Congrats " << game.currentColor() << "! " << std::endl;
-	std::cout << "You won the game in " << game.getTurn() << " moves." << std::endl;
-	std::cout << std::endl << "Thanks for playing" << std::endl;*/
     
+    // provide information and statistics at the end of the game
     std::cout << game.currentColor() << " lost! " << std::endl;
 	std::cout << "The game lasted " << game.getTurn() << " moves." << std::endl;
 	std::cout << std::endl << "Thanks for playing" << std::endl;
@@ -65,20 +66,5 @@ int main(){
     else
         game.updateStats(user2, user1);
     
-
     return 0;
 }
-
-/*zach's test case
-b3>c4
-c6>d5
-c2>b3
-g6>h5
-f3>g4
-h5>f3
-b3>a4
-f7>g6
-d1>c2
-d5>b3 b3>d1
-a4>b5
-*/

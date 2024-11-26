@@ -2,43 +2,38 @@
 #include "Game.h"
 #include "User.h"
 
-Game::Game() {
+// file that holds all the logic relateble to Game class
+
+// game constructor
+Game::Game() 
+{
     //odd turns are red, black are even
     turn = 1;
 }
 
+// starts the game
 void Game::play() {
     std::string input;
 
     board.display();
-
+    
+    // display who should move now and get the coordinates as input
     std::cout << currentColor() << "'s turn." << std::endl;
     std::getline(std::cin, input);
-
     board.attemptMove(input, turn);
-
 }
 
+// check if players have any remaining piece on the board
 bool Game::endGame() {
     bool hasMove = false;
 
-    //check if any pieces of the current turn color are moveable
     for (int row = 0; row < 8; row++) {
         for (int col = 0; col < 8; col++) {
             Piece* piece = board.board[row][col];
 
-            //if there is a piece at that location, and the piece is the right color for the turn
+            // if there is a piece at that location, and the piece is the right color for the turn
             if (piece != nullptr && piece->isBlackCheck() == (turn % 2 == 0)) {
-                //just checking whether there is at least one piece of the right color on the board
                 return false;
-
-                //need to somehow determine if that piece has a valid move.
-                //not sure how to do this cleanly since board checks validity of moves
-                //based on coordinates and piece checks validity of moves not in relation to other pieces
-
-                //right now I have it checking just if all the pieces are captured or not,
-                //but techincally it should also check if the only remaining pieces are stuck/trapped
-
             }
         }
     }
@@ -46,18 +41,18 @@ bool Game::endGame() {
     return true;
 }
 
-//getter for turn variable
+// getter for turn variable
 int Game::getTurn() const{
     return turn;
 }
 
-//returns the current colour based on what turn it is
+// returns the current colour based on what turn it is
 std::string Game::currentColor() const {
     return turn % 2 == 0 ? "Black" : "Red";
 }
 
 // updates the stats in a dedicated file
-void Game::updateStats(User winner, User loser)
+void Game::updateStats(User& winner, User& loser)
 {
     std::string name;
     int wins, losses;
@@ -93,7 +88,7 @@ void Game::updateStats(User winner, User loser)
         updatedRecords.push_back(name + " " + std::to_string(wins) + " " + std::to_string(losses));
     }
     
-    // if winner or looser are not in records, then create a new record for them
+    // if winner or loser is not in records, create a new record for them
     if (!foundWinner)
     {
         updatedRecords.push_back(winner.getName() + " " + "1" + " " + "0");
@@ -104,14 +99,14 @@ void Game::updateStats(User winner, User loser)
     if (!foundLoser)
     {
         updatedRecords.push_back(loser.getName() + " " + "0" + " " + "1");
-        winner.setWins(0);
-        winner.setLosses(1);
+        loser.setWins(0);
+        loser.setLosses(1);
     }
     
     // close records for reading
     records.close();
     
-    std::cout << std::setw(2) << "\nThe winrate for " << winner.getName() << " is " << static_cast<int>(static_cast<float>(winner.getWins()) / (winner.getLosses() + winner.getWins()) * 100) << "%" << std::endl;
+    std::cout << "\nThe winrate for " << winner.getName() << " is " << static_cast<int>(static_cast<float>(winner.getWins()) / (winner.getLosses() + winner.getWins()) * 100) << "%" << std::endl;
     
     std::cout << "The winrate for " << loser.getName() << " is " << static_cast<int>(static_cast<float>(loser.getWins()) / (loser.getLosses() + loser.getWins()) * 100) << "%" << std::endl;
     
@@ -125,7 +120,7 @@ void Game::updateStats(User winner, User loser)
     newRecords.close(); 
 }
 
-//destructor for game
+// destructor for game
 Game::~Game() {
     std::cout << "Game is over." << std::endl;
 }
