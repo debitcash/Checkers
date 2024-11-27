@@ -146,8 +146,9 @@ void Board::attemptMove(std::string input, int& turn)
             // set new coordinates in the hopping piece
             board[destRow][destCol]->setOriginCol(destCol);
             board[destRow][destCol]->setOriginRow(destRow);
-            
-            std::cout << "The piece has moved to row " << destRow << " and the column moved to " << destCol << std::endl;
+
+            //for testing
+            //std::cout << "The piece has moved to row " << destRow << " and the column moved to " << destCol << std::endl;
             
             checkPromotion(destRow,destCol);
             
@@ -296,7 +297,7 @@ void Board::display() const
             else if (!board[y][x]->isBlackCheck())
             {
                 if(typeid(*board[y][x]) == typeid(KingChecker)) {
-                    std::cout << "\033[34m\u265B\033[0m ";
+                    std::cout << "\033[31m\u265B\033[0m ";
                 }else {
                     std::cout << "\033[31m\u25CF\033[0m ";
                 }
