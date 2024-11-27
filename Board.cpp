@@ -6,7 +6,7 @@
 // class that is responsible for all the piece movements on the board, and visually displaying the game
 
 // allows for colour usability
-//#include <windows.h>
+#include <windows.h>
 
 void invertCoordinates(int& originRow, int& originCol, int& destRow, int& destCol);
 
@@ -61,8 +61,9 @@ void Board::attemptMove(std::string input, int& turn)
         // provide the new coordinates for a piece
         board[destRow][destCol]->setOriginCol(destCol);
         board[destRow][destCol]->setOriginRow(destRow);
-        
-        std::cout << "The piece has moved to row " << destRow << " and the column moved to " << destCol << std::endl;
+
+        //just for testing
+        //std::cout << "The piece has moved to row " << destRow << " and the column moved to " << destCol << std::endl;
         
         // check if we should promote a piece after a move
         checkPromotion(destRow,destCol);
@@ -231,7 +232,7 @@ void Board::invertBoard()
 	}
 }
 
-// display the board in terminal
+/*// display the board in terminal
 void Board::display() const {
             for (int y = 0; y < 8; y++)
             {
@@ -242,14 +243,23 @@ void Board::display() const {
                     {
                         std::cout << ". ";
                     }
+                    //if the piece is black
                     else if (board[y][x]->isBlackCheck())
                     {
-                        std::cout << "b ";
+                        if(typeid(*board[y][x]) == typeid(KingChecker)) {
+                            std::cout << "B ";
+                        }else {
+                            std::cout << "b ";
+                        }
                     }
-
+                    //if the piece is red
                     else if (!board[y][x]->isBlackCheck())
                     {
-                        std::cout << "r ";
+                        if(typeid(*board[y][x]) == typeid(KingChecker)) {
+                            std::cout << "R ";
+                        }else {
+                            std::cout << "r ";
+                        }
                     }
 
                 }
@@ -257,10 +267,9 @@ void Board::display() const {
             }
             std::cout << "--+-----------------" << std::endl;
             std::cout << "  | a b c d e f g h" << std::endl;
-        }
-/*
-// display the board in terminal
-void Board::display()
+        }*/
+// display the board in color in terminal
+void Board::display() const
 {
     //allows for colour printout in the terminal
     system(("chcp " + std::to_string(CP_UTF8)).c_str());
@@ -274,16 +283,23 @@ void Board::display()
             {
                 std::cout << ". ";
             }
+            //if the piece is black
             else if (board[y][x]->isBlackCheck())
             {
-                //std::cout << "b ";
-                std::cout << "\033[34m\u25CF\033[0m ";
+                if(typeid(*board[y][x]) == typeid(KingChecker)) {
+                    std::cout << "\033[34m\u265B\033[0m ";
+                }else {
+                    std::cout << "\033[34m\u25CF\033[0m ";
+                }
             }
-
+            //if the piece is red
             else if (!board[y][x]->isBlackCheck())
             {
-                //std::cout << "r ";
-                std::cout << "\033[31m\u25CF\033[0m ";
+                if(typeid(*board[y][x]) == typeid(KingChecker)) {
+                    std::cout << "\033[34m\u265B\033[0m ";
+                }else {
+                    std::cout << "\033[31m\u25CF\033[0m ";
+                }
             }
 
         }
@@ -292,7 +308,6 @@ void Board::display()
     std::cout << "--+-----------------" << std::endl;
     std::cout << "  | a b c d e f g h" << std::endl;
 }
-*/
 
 // a coolection of user input error checks
 bool Board::checkForError(int originRow, int originCol, int destRow, int destCol, const int& turn, const Piece* chosenPiece) 

@@ -1,7 +1,7 @@
 #ifndef USER_H
 #define USER_H
 
-#include "Board.h"
+//#include "Board.h"
 #include <string>
 
 // user class headers
