@@ -272,8 +272,8 @@ void Board::display() const {
 // display the board in color in terminal
 void Board::display() const
 {
-    //allows for colour printout in the terminal
-    system(("chcp " + std::to_string(CP_UTF8)).c_str());
+    /*//allows for colour printout in the terminal
+    system(("chcp " + std::to_string(CP_UTF8)).c_str());*/
 
     for (int y = 0; y < 8; y++)
     {

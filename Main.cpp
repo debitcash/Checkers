@@ -5,6 +5,12 @@
 #include "User.cpp"
 #include "KingChecker.cpp"*/
 
+// allows for colour usability
+#include <windows.h>
+
+#include <sstream>
+#include <typeinfo>
+
 #include "Board.h"
 #include "Checker.h"
 #include "Piece.h"
@@ -14,6 +20,9 @@
 // file that contaings control flow for main  logic
 
 int main(){
+
+	//allows for colour printout in the terminal
+	system(("chcp " + std::to_string(CP_UTF8)).c_str());
 
     // welcome the use and display game instructions
 	std::cout << "\t\tWelcome to checkers!" << std::endl;
@@ -29,7 +38,9 @@ int main(){
 	std::cout << "|  " <<  std::setw(61) << std::left <<  "\teg. b3>c4" << " |" << std::endl;
 	std::cout << "|  " <<  std::setw(65) << std::left <<  "To perform multiple jump moves, enter the first set of" <<" |" << std::endl;
 	std::cout << "|  " <<  std::setw(65) << std::left <<  "coordinates, a space " ", then the second set of coordinates. " <<" |" << std::endl;
-	std::cout << "|  " <<  std::setw(61) << std::left <<  "\teg. b3>d &d5>b7" <<" |" << std::endl;
+	std::cout << "|  " <<  std::setw(61) << std::left <<  "\teg. b3>d5 "
+													   ""
+				"d5>b7" <<" |" << std::endl;
 	std::cout << "|********************************************************************|" << std::endl;
 	std::cout << "\t\tHave fun!" << std::endl << std::endl;
 
