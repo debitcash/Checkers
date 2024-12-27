@@ -16,6 +16,8 @@ private:
 public:
     User(std::string Name);
     
+    User();
+    
     // setters and getters for data members
     int getWins();
 
@@ -26,6 +28,7 @@ public:
     void setLosses(int);
 
     std::string getName();
+    void setName(std::string newName);
 };
 
 #endif //USER_H

@@ -17,7 +17,8 @@ public:
     Game();
 
     // starts new game
-    void play();
+    void pvpPlay();
+    void aiPlay();
 
     // ends game
     bool endGame();

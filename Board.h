@@ -16,7 +16,7 @@ class Board {
 private:
     // declare the board and initialize the board values
     // the board is now of a piece class, so it can contain both regular checkers and kings
-    Piece* board[8][8] = {
+    /*Piece* board[8][8] = {
         {nullptr, new Checker(false, false, 0, 1,false), nullptr, new Checker(false, false, 0, 3,false),
             nullptr, new Checker(false, false, 0, 5,false), nullptr, new Checker(false, false, 0, 7,false)}, // red pieces
         {new Checker(false, false, 1, 0,false), nullptr, new Checker(false, false, 1, 2,false), nullptr,
@@ -30,9 +30,28 @@ private:
         {nullptr, new Checker(true, false, 7 - 6, 7 - 1, false), nullptr, new Checker(true, false, 7 - 6, 7 - 3, false), nullptr,
             new Checker(true, false, 7 - 6, 7 - 5, false), nullptr, new Checker(true, false, 7 - 6, 7 - 7, false)},
         {new Checker(true, false, 7 - 7, 7 - 0, false), nullptr, new Checker(true, false, 7 - 7, 7 - 2, false), nullptr,
-            new Checker(true, false, 7 - 7, 7 - 4, false), nullptr, new Checker(true, false, 7 - 7, 7 - 6, false), nullptr}}; // black pieces
+            new Checker(true, false, 7 - 7, 7 - 4, false), nullptr, new Checker(true, false, 7 - 7, 7 - 6, false), nullptr}}; // black pieces*/
+            
+        Piece* board[8][8] = {
+        {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
+        {nullptr, nullptr, new Checker(false, false,1,2,false), nullptr, nullptr, nullptr, nullptr, nullptr},
+        {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
+        {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
+        {nullptr, new Checker(true,false,7-4, 7-1,false), nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
+        {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
+        {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
+        {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},}; // black pieces
             
 public:
+    
+    // no parameter constructor
+    Board();
+    
+    // deep copy constructor
+    Board(Board &originalBoard);
+    
+    Piece* (*getBoard())[8][8];
+
     // attempt to make a move to provided coordinates
     void attemptMove(std::string input, int& turn);
     
@@ -50,6 +69,9 @@ public:
     
     // checks if the piece is kingChecker
     void checkPromotion(int originRow, int originCol);
+    
+    // get the pieces difference
+    int getBlackMinusRed();
 };
 
 #endif //BOARD_H

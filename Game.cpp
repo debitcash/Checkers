@@ -1,6 +1,7 @@
 #include <fstream>
 #include "Game.h"
 #include "User.h"
+#include "AiUser.cpp"
 
 // file that holds all the logic relateble to Game class
 
@@ -12,7 +13,7 @@ Game::Game()
 }
 
 // starts the game
-void Game::play() {
+void Game::pvpPlay() {
     std::string input;
 
     board.display();
@@ -20,6 +21,26 @@ void Game::play() {
     // display who should move now and get the coordinates as input
     std::cout << currentColor() << "'s turn." << std::endl;
     std::getline(std::cin, input);
+    board.attemptMove(input, turn);
+}
+
+void Game::aiPlay() {
+    std::string input;
+    AiUser aiUser;
+    board.display();
+    
+    // display who should move now and get the coordinates as input
+    std::cout << currentColor() << "'s turn." << std::endl;
+    
+    if (currentColor() == "Black")
+    {
+        std::cout << "AI TURN NOW" << std::endl;
+        input = aiUser.getAiMove(board);
+    }
+    
+    else
+        std::getline(std::cin, input);
+    
     board.attemptMove(input, turn);
 }
 

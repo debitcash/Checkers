@@ -2,16 +2,54 @@
 #include <vector>
 #include <sstream>
 #include <typeinfo>
+#include <iostream>
 
 // class that is responsible for all the piece movements on the board, and visually displaying the game
 
 // allows for colour usability
-#include <windows.h>
+//#include <windows.h>
 
 void invertCoordinates(int& originRow, int& originCol, int& destRow, int& destCol);
 
 // parses string coordinates into a vector of int pairs
 std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > parseMove(const std::string& moves);
+
+Board::Board(){}
+
+Board::Board(Board &originalBoard)
+{
+    for (int row = 0; row < 8; row++)
+    {
+        for (int column = 0; column < 8; column++)
+        {
+            if (board[row][column] != nullptr)
+            {
+                delete board[row][column];
+                board[row][column] = nullptr;
+            }
+        }
+    }
+    
+    for (int row = 0; row < 8; row++)
+    {
+        for (int column = 0; column < 8; column++)
+        {
+            if ((*originalBoard.getBoard())[row][column] != nullptr)
+            {
+                Piece* piece = (*originalBoard.getBoard())[row][column];
+                Checker* oldCheckerPtr = dynamic_cast<Checker *>(piece);
+                Checker* newCheckerPtr = new Checker(*oldCheckerPtr);
+                
+                board[row][column] = newCheckerPtr;
+            }
+        }
+    }
+    
+}
+
+Piece* (*Board::getBoard())[8][8] {
+    return &board;
+}
 
 // attempt to make a move to provided coordinates
 void Board::attemptMove(std::string input, int& turn)
@@ -233,7 +271,7 @@ void Board::invertBoard()
 	}
 }
 
-/*// display the board in terminal
+// display the board in terminal
 void Board::display() const {
             for (int y = 0; y < 8; y++)
             {
@@ -268,12 +306,15 @@ void Board::display() const {
             }
             std::cout << "--+-----------------" << std::endl;
             std::cout << "  | a b c d e f g h" << std::endl;
-        }*/
+        }
+         
+        
 // display the board in color in terminal
+/*
 void Board::display() const
 {
-    /*//allows for colour printout in the terminal
-    system(("chcp " + std::to_string(CP_UTF8)).c_str());*/
+    ///allows for colour printout in the terminal
+    system(("chcp " + std::to_string(CP_UTF8)).c_str());
 
     for (int y = 0; y < 8; y++)
     {
@@ -308,7 +349,7 @@ void Board::display() const
     }
     std::cout << "--+-----------------" << std::endl;
     std::cout << "  | a b c d e f g h" << std::endl;
-}
+}*/
 
 // a coolection of user input error checks
 bool Board::checkForError(int originRow, int originCol, int destRow, int destCol, const int& turn, const Piece* chosenPiece) 
@@ -438,4 +479,26 @@ void Board::checkPromotion(int originRow, int originCol)
         
         std::cout << "Checker has been promoted to KingChecker" << std::endl;
     }
+}
+
+int Board::getBlackMinusRed()
+{
+    int balance = 0;
+    
+    for (int row = 0; row < 8; row++)
+    {
+        for (int column = 0; column < 8; column++)
+        {
+            if (board[row][column]->isBlackCheck())
+            {
+                balance += 1;
+            }
+            else if (board[row][column]->isBlackCheck())
+            {
+                balance -= 1;
+            }
+        }
+    }
+    
+    return balance;
 }

@@ -42,7 +42,7 @@ bool Checker::isValidMove(int destRow, int destCol) {
 }
 
 Checker::~Checker() {
-    std::cout << "Checker has been captured." << std::endl;
+    //std::cout << "Checker has been captured." << std::endl;
 }
 
 // promote checker if reached the opposite side of the board

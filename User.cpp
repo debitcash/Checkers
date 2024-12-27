@@ -7,9 +7,21 @@ User::User(std::string newName)
 }
 
 // constructor
+User::User()
+{
+    name = "";
+}
+
+// constructor
 std::string User::getName()
 {
     return name;
+}
+
+// constructor
+void User::setName(std::string newName)
+{
+    name = newName;
 }
 
 // setters and getter for all the datamembers

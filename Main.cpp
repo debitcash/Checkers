@@ -1,12 +1,12 @@
-/*#include "Board.cpp"
+#include "Board.cpp"
 #include "Checker.cpp"
 #include "Piece.cpp"
 #include "Game.cpp"
 #include "User.cpp"
-#include "KingChecker.cpp"*/
+#include "KingChecker.cpp"
 
 // allows for colour usability
-#include <windows.h>
+//#include <windows.h>
 
 #include <sstream>
 #include <typeinfo>
@@ -22,7 +22,7 @@
 int main(){
 
 	//allows for colour printout in the terminal
-	system(("chcp " + std::to_string(CP_UTF8)).c_str());
+	//system(("chcp " + std::to_string(CP_UTF8)).c_str());
 
     // welcome the use and display game instructions
 	std::cout << "\t\tWelcome to checkers!" << std::endl;
@@ -48,22 +48,50 @@ int main(){
 	Game game;
     
     // variables to store user's name
-    std::string name1,name2;
+    std::string name1,name2, gameStyle;
     
     // take user input
-    std::cout << "Provide the name of first player: " << std::endl;
-    std::getline(std::cin, name1);
-    std::cout << "Provide the name of second player: " << std::endl;
-    std::getline(std::cin, name2);
+    std::cout << "What king of game would you like to play? (PvP or PvAI) " << std::endl;
+    std::getline(std::cin, gameStyle);
     
-    // provide user input to user objects
-    User user1(name1);
-    User user2(name2);
+    User user1;
+    User user2;
+    
+    if (gameStyle == "PvP")
+    {
+        // take user input
+        std::cout << "Provide the name of first player: " << std::endl;
+        std::getline(std::cin, name1);
+        std::cout << "Provide the name of second player: " << std::endl;
+        std::getline(std::cin, name2);
+        
+        // provide user input to user objects
+        user1.setName(name1);
+        user2.setName(name2);
+        
+        //continue playing the game until end game status is reached
+        while(!game.endGame()) {
+            game.pvpPlay();
+        }
+    }
 
-	//continue playing the game until end game status is reached
-	while(!game.endGame()) {
-		game.play();
-	}
+    else if(gameStyle == "AI")
+    {
+        // take user input
+        std::cout << "Provide the name of human player: " << std::endl;
+        std::getline(std::cin, name1);
+        
+        name2 = "AI";
+        
+        // provide user input to user objects
+        user1.setName(name1);
+        user2.setName(name2);
+        
+        //continue playing the game until end game status is reached
+        while(!game.endGame()) {
+            game.aiPlay();
+        }
+    }
     
     // provide information and statistics at the end of the game
     std::cout << game.currentColor() << " lost! " << std::endl;

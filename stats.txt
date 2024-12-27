@@ -12,3 +12,5 @@ Olivia 1 0
 Spenny 0 1
 Tim 2 0
 Dana 0 2
+ 1 0
+ 0 1
