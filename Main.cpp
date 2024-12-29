@@ -52,44 +52,54 @@ int main(){
     
     // take user input
     std::cout << "What king of game would you like to play? (PvP or PvAI) " << std::endl;
-    std::getline(std::cin, gameStyle);
+    
     
     User user1;
     User user2;
     
-    if (gameStyle == "PvP")
+    while (gameStyle != "PvP" || gameStyle != "AI")
     {
-        // take user input
-        std::cout << "Provide the name of first player: " << std::endl;
-        std::getline(std::cin, name1);
-        std::cout << "Provide the name of second player: " << std::endl;
-        std::getline(std::cin, name2);
+        std::getline(std::cin, gameStyle);
         
-        // provide user input to user objects
-        user1.setName(name1);
-        user2.setName(name2);
-        
-        //continue playing the game until end game status is reached
-        while(!game.endGame()) {
-            game.pvpPlay();
+        if (gameStyle == "PvP")
+        {
+            // take user input
+            std::cout << "Provide the name of first player: " << std::endl;
+            std::getline(std::cin, name1);
+            std::cout << "Provide the name of second player: " << std::endl;
+            std::getline(std::cin, name2);
+            
+            // provide user input to user objects
+            user1.setName(name1);
+            user2.setName(name2);
+            
+            //continue playing the game until end game status is reached
+            while(!game.endGame()) {
+                game.pvpPlay();
+            }
         }
-    }
 
-    else if(gameStyle == "AI")
-    {
-        // take user input
-        std::cout << "Provide the name of human player: " << std::endl;
-        std::getline(std::cin, name1);
+        else if(gameStyle == "PvAI")
+        {
+            // take user input
+            std::cout << "Provide the name of human player: " << std::endl;
+            std::getline(std::cin, name1);
+            
+            name2 = "AI";
+            
+            // provide user input to user objects
+            user1.setName(name1);
+            user2.setName(name2);
+            
+            //continue playing the game until end game status is reached
+            while(!game.endGame()) {
+                game.aiPlay();
+            }
+        }
         
-        name2 = "AI";
-        
-        // provide user input to user objects
-        user1.setName(name1);
-        user2.setName(name2);
-        
-        //continue playing the game until end game status is reached
-        while(!game.endGame()) {
-            game.aiPlay();
+        else
+        {
+            std::cout << "Please provide a valid input: \"PvP\" or \"PvAI\"" <<std::endl;
         }
     }
     

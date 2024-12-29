@@ -34,7 +34,7 @@ void Game::aiPlay() {
     
     if (currentColor() == "Black")
     {
-        std::cout << "AI TURN NOW" << std::endl;
+        std::cout << "AI made move" << std::endl;
         input = aiUser.getAiMove(board);
     }
     

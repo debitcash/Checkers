@@ -16,8 +16,10 @@ std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > parseMove(con
 
 Board::Board(){}
 
+// copy constructor
 Board::Board(Board &originalBoard)
 {
+    // reclaim memory from the default board array
     for (int row = 0; row < 8; row++)
     {
         for (int column = 0; column < 8; column++)
@@ -30,6 +32,7 @@ Board::Board(Board &originalBoard)
         }
     }
     
+    // populate with the same values as in the targeted board
     for (int row = 0; row < 8; row++)
     {
         for (int column = 0; column < 8; column++)
@@ -37,14 +40,22 @@ Board::Board(Board &originalBoard)
             if ((*originalBoard.getBoard())[row][column] != nullptr)
             {
                 Piece* piece = (*originalBoard.getBoard())[row][column];
-                Checker* oldCheckerPtr = dynamic_cast<Checker *>(piece);
-                Checker* newCheckerPtr = new Checker(*oldCheckerPtr);
                 
-                board[row][column] = newCheckerPtr;
+                if (typeid(*piece) == typeid(Checker))
+                {
+                    Checker* oldCheckerPtr = dynamic_cast<Checker *>(piece);
+                    Checker* newCheckerPtr = new Checker(*oldCheckerPtr);
+                    board[row][column] = newCheckerPtr;
+                }
+                else
+                {
+                    KingChecker* oldCheckerPtr = dynamic_cast<KingChecker *>(piece);
+                    KingChecker* newCheckerPtr = new KingChecker(*oldCheckerPtr);
+                    board[row][column] = newCheckerPtr;
+                } 
             }
         }
     }
-    
 }
 
 Piece* (*Board::getBoard())[8][8] {
@@ -271,7 +282,7 @@ void Board::invertBoard()
 	}
 }
 
-// display the board in terminal
+// display the default style of the board in terminal
 void Board::display() const {
             for (int y = 0; y < 8; y++)
             {
@@ -300,7 +311,6 @@ void Board::display() const {
                             std::cout << "r ";
                         }
                     }
-
                 }
                 std::cout << std::endl;
             }
@@ -343,7 +353,6 @@ void Board::display() const
                     std::cout << "\033[31m\u25CF\033[0m ";
                 }
             }
-
         }
         std::cout << std::endl;
     }
@@ -434,7 +443,6 @@ std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > parseMove(con
 
         for (std::string stringMove: rawMoves) 
         {
-            
             if (stringMove.size() != 5 || stringMove[2] != '>') 
             {
                 parsedMoves.push_back(std::make_pair(std::make_pair(-1, -1), std::make_pair(-1, -1)));
@@ -448,8 +456,8 @@ std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > parseMove(con
             int destrow = stringMove[4] - '1';
 
             parsedMoves.push_back({{originrow, originCol}, {destrow, destCol} });
-            
         }
+        
      return parsedMoves;
 }
 
@@ -459,7 +467,6 @@ void Board::checkPromotion(int originRow, int originCol)
     
     // casting or else could not get the promotion() function to work 
     Checker* checker = dynamic_cast<Checker*>(piece);
-    
     
     if (checker != nullptr && checker -> promotion())
     {
