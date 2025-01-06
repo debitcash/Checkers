@@ -1,33 +1,36 @@
 #ifndef USER_H
 #define USER_H
 
-//#include "Board.h"
 #include <string>
+#include "Board.h"
 
-// user class headers
-
+// User class provides general functionality for a specific user
 class User {
-
-// data members
 private:
     std::string name;
     int wins, losses;
+    static int userCount;
 
 public:
-    User(std::string Name);
     
     User();
     
+    // gets a move path from a user
+    virtual std::string getMove(Board originalBoard);
+    
     // setters and getters for data members
+    int getCount();
+    
     int getWins();
 
     int getLosses();
     
+    std::string getName();
+    
     void setWins(int);
     
     void setLosses(int);
-
-    std::string getName();
+    
     void setName(std::string newName);
 };
 

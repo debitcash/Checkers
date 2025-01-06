@@ -10,44 +10,42 @@ Game::Game()
 {
     //odd turns are red, black are even
     turn = 1;
+    board.initialise();
 }
 
-// starts the game
-void Game::pvpPlay() {
-    std::string input;
-
-    board.display();
-    
-    // display who should move now and get the coordinates as input
-    std::cout << currentColor() << "'s turn." << std::endl;
-    std::getline(std::cin, input);
-    board.attemptMove(input, turn);
-}
-
-void Game::aiPlay() {
-    std::string input;
-    AiUser aiUser;
+void Game::play(User* ptrUser1, User* ptrUser2)
+{
+    std::string providedMove;
     board.display();
     
     // display who should move now and get the coordinates as input
     std::cout << currentColor() << "'s turn." << std::endl;
     
-    if (currentColor() == "Black")
+    if (currentColor() == "Red")
+        providedMove = ptrUser1->getMove(board);
+    else
     {
-        std::cout << "AI made move" << std::endl;
-        input = aiUser.getAiMove(board);
+        board.display();
+        providedMove = ptrUser2->getMove(board);
     }
     
-    else
-        std::getline(std::cin, input);
+    if (providedMove == "Give up")
+    {
+        giveUp = true;
+        return;
+    }
     
-    board.attemptMove(input, turn);
+    // check if provided move is valid
+    board.attemptMove(providedMove, turn);
+    
 }
 
-// check if players have any remaining piece on the board
-bool Game::endGame() {
-    bool hasMove = false;
-
+// check if players have any remaining pieces on the board
+bool Game::endGame() 
+{
+    if (giveUp)
+        return true;
+    
     for (int row = 0; row < 8; row++) {
         for (int col = 0; col < 8; col++) {
             Piece* piece = board.board[row][col];
@@ -58,7 +56,7 @@ bool Game::endGame() {
             }
         }
     }
-
+    
     return true;
 }
 
@@ -72,7 +70,7 @@ std::string Game::currentColor() const {
     return turn % 2 == 0 ? "Black" : "Red";
 }
 
-// updates the stats in a dedicated file
+// update the stats in a dedicated file
 void Game::updateStats(User& winner, User& loser)
 {
     std::string name;
@@ -144,4 +142,5 @@ void Game::updateStats(User& winner, User& loser)
 // destructor for game
 Game::~Game() {
     std::cout << "Game is over." << std::endl;
+    board.cleanupBoardMemory( );
 }

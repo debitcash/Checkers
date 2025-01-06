@@ -1,8 +1,8 @@
-#include "Board.h"
 #include <vector>
 #include <sstream>
 #include <typeinfo>
 #include <iostream>
+#include "Board.h"
 
 // class that is responsible for all the piece movements on the board, and visually displaying the game
 
@@ -16,31 +16,48 @@ std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > parseMove(con
 
 Board::Board(){}
 
-// copy constructor
-Board::Board(Board &originalBoard)
+// initialise the board with general checker layout
+void Board::initialise()
 {
-    // reclaim memory from the default board array
-    for (int row = 0; row < 8; row++)
+    Piece* newBoard[8][8] = {
+        {nullptr, new Checker(false, false, 0, 1,false), nullptr, new Checker(false, false, 0, 3,false),
+            nullptr, new Checker(false, false, 0, 5,false), nullptr, new Checker(false, false, 0, 7,false)}, // red pieces
+        {new Checker(false, false, 1, 0,false), nullptr, new Checker(false, false, 1, 2,false), nullptr,
+            new Checker(false, false, 1, 4,false), nullptr, new Checker(false, false, 1, 6,false), nullptr},
+        {nullptr, new Checker(false, false, 2, 1,false), nullptr, new Checker(false, false, 2, 3,false),
+            nullptr, new Checker(false, false, 2, 5,false), nullptr, new Checker(false, false, 2, 7,false)},
+        {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
+        {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
+        {new Checker(true, false, 7 - 5, 7 - 0, false), nullptr, new Checker(true, false, 7 - 5, 7 - 2, false), nullptr,
+            new Checker(true, false, 7 - 5, 7 - 4, false), nullptr, new Checker(true, false, 7 - 5, 7 - 6, false), nullptr},
+        {nullptr, new Checker(true, false, 7 - 6, 7 - 1, false), nullptr, new Checker(true, false, 7 - 6, 7 - 3, false), nullptr,
+            new Checker(true, false, 7 - 6, 7 - 5, false), nullptr, new Checker(true, false, 7 - 6, 7 - 7, false)},
+        {new Checker(true, false, 7 - 7, 7 - 0, false), nullptr, new Checker(true, false, 7 - 7, 7 - 2, false), nullptr,
+            new Checker(true, false, 7 - 7, 7 - 4, false), nullptr, new Checker(true, false, 7 - 7, 7 - 6, false), nullptr}};
+
+    // reassign the default board with general checker layout
+    for (int row = 0; row < 8; row++) 
     {
-        for (int column = 0; column < 8; column++)
+        for (int col = 0; col < 8; col++) 
         {
-            if (board[row][column] != nullptr)
-            {
-                delete board[row][column];
-                board[row][column] = nullptr;
-            }
+            board[row][col] = newBoard[row][col];
         }
     }
-    
+}
+
+// deep copy constructor
+Board::Board(Board &originalBoard)
+{
     // populate with the same values as in the targeted board
     for (int row = 0; row < 8; row++)
     {
         for (int column = 0; column < 8; column++)
         {
-            if ((*originalBoard.getBoard())[row][column] != nullptr)
+            if (originalBoard.board[row][column] != nullptr)
             {
-                Piece* piece = (*originalBoard.getBoard())[row][column];
+                Piece* piece = originalBoard.board[row][column];
                 
+                // account for different checker types
                 if (typeid(*piece) == typeid(Checker))
                 {
                     Checker* oldCheckerPtr = dynamic_cast<Checker *>(piece);
@@ -58,212 +75,222 @@ Board::Board(Board &originalBoard)
     }
 }
 
-Piece* (*Board::getBoard())[8][8] {
-    return &board;
-}
-
-// attempt to make a move to provided coordinates
+// attempt to make a move with user-provided coordinates
 void Board::attemptMove(std::string input, int& turn)
 {
-    // store the entered moves, provided by parse function. Can be either 1 move, or multiple hops
-    std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > moveSequence = parseMove(input);
-
-    // check if user did not provide any coordinates at all
-    if (moveSequence.size() == 0)
-    {
-        std::cout << "You did not provide any coordinates, please try again." << std::endl;
-        return;
-    }
-        
-    // get coordinates of first move in the from the entered sequence
-    int originRow = moveSequence[0].first.first;
-    int originCol = moveSequence[0].first.second;
-    int destRow = moveSequence[0].second.first;
-    int destCol = moveSequence[0].second.second;
+    bool isBlack = turn % 2 == 0;
     
-    // get the element that is selected for a move
-    Piece* chosenPiece = board[originRow][originCol];
+    // store the user-provided moves, converted from string to coordinates by parse function. Can be either 1 move, or multiple hops
+    std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > providedMove = parseMove(input);
     
-    // check if any errors are associated with the first in sequence (or only one) move
-    if (checkForError(originRow, originCol, destRow, destCol, turn, board[originRow][originCol]))
-    {
-        return ;
-    }
-
-    bool isBlack = chosenPiece->isBlackCheck();
-
-    // invert board and coordinates if the piece is black
-    if(isBlack)
+    // invert the board and provided coordinates for black piece player
+    if (isBlack)
     {
         invertBoard();
-        invertCoordinates(originRow, originCol, destRow, destCol);
-    }
-    
-    // do regular move if only one square move provided, or a sequence where the first move is one square move
-    // we don't care about the next move, because only hops can be provided in multiple moves sequence
-    if (originRow + 1 == destRow  &&  chosenPiece->isValidMove(destRow, destCol ))
-    {
-        // provide new locations for the moved checker
-        board[destRow][destCol] = board[originRow][originCol];
-        board[originRow][originCol] = nullptr;
         
-        // provide the new coordinates for a piece
-        board[destRow][destCol]->setOriginCol(destCol);
-        board[destRow][destCol]->setOriginRow(destRow);
-
-        //just for testing
-        //std::cout << "The piece has moved to row " << destRow << " and the column moved to " << destCol << std::endl;
-        
-        // check if we should promote a piece after a move
-        checkPromotion(destRow,destCol);
-    }
-    
-    // different checking logic for a kingChecker single move
-    else if (originRow - 1 == destRow && chosenPiece-> isValidMove(destRow, destCol) && typeid(*chosenPiece) == typeid(KingChecker) )
-    {
-        // provide new location for the moved checker
-        board[destRow][destCol] = board[originRow][originCol];
-        board[originRow][originCol] = nullptr;
-        
-        // provide the new coordinates for a piece
-        board[destRow][destCol]->setOriginCol(destCol);
-        board[destRow][destCol]->setOriginRow(destRow);
-        
-        std::cout << "This piece has moved to row " << destRow << " and the column moved to" << destCol <<std::endl;
-        
-        // don't need to check promotion for kingChecker since its already kingChecker 
-    }
-    
-    // process when there were more that one hop provided
-    else
-    {
-        // create variables that are going to track whether the moves actually follow a chain of one piece movement
-        // otherwise, user will be able to move two different pieces at same time
-        int previousHopRow = -1;
-        int previousHopCol = -1;
-        
-        // repeat for each pair in a user provided sequence
-        for (std::pair<std::pair<int, int>, std::pair<int, int> > coordinates : moveSequence)
+        for (std::pair<std::pair<int, int>, std::pair<int, int> > &move : providedMove)
         {
-            // get coordinates for the move from movesequence
-            int originRow = coordinates.first.first;
-            int originCol = coordinates.first.second;
-            int destRow = coordinates.second.first;
-            int destCol = coordinates.second.second;
-            
-            // invert coordinates for black piece, because they are updated every time a new move is taken from hop sequence
-            if(isBlack)
-            {
-                invertCoordinates(originRow, originCol, destRow, destCol);
-            }
-            
-            // if piece is not following the move chain, let the user do only first valid move
-            if (!((originRow == previousHopRow && originCol == previousHopCol) || (previousHopRow == -1 && previousHopCol == -1)))
-            {
-                std::cout << "You are attempting to move different pieces at same time, only first move was executed." << std::endl;
-                
-                if(chosenPiece->isBlackCheck())
-                    invertBoard();
-                    
-                return ;
-            }
-            
-            // checking for errors, because new coordinates are provided for each new hop
-            if (checkForError(originRow, originCol, destRow, destCol, turn, chosenPiece))
-            {
-                if(chosenPiece->isBlackCheck())
-                    invertBoard();
-                return ;
-            }
-            
-            // do captureMoveCheck
-            if (!captureMoveCheck(originRow, originCol, destRow, destCol, turn))
-            {
-                if(chosenPiece->isBlackCheck())            
-                    invertBoard();
-                return;
-            }
-            
-            // do the cleanup of captured piece after the hop
-            delete board[(destRow + originRow) / 2][(destCol + originCol) / 2];
-            board[(destRow + originRow) / 2][(destCol + originCol) / 2] = nullptr;
-            
-            // update location of the hopping piece
-            board[destRow][destCol] = board[originRow][originCol];
-            board[originRow][originCol] = nullptr; 
-            
-            // set new coordinates in the hopping piece
-            board[destRow][destCol]->setOriginCol(destCol);
-            board[destRow][destCol]->setOriginRow(destRow);
-
-            //for testing
-            //std::cout << "The piece has moved to row " << destRow << " and the column moved to " << destCol << std::endl;
-            
-            checkPromotion(destRow,destCol);
-            
-            // update the markers to track the hopping path
-            previousHopRow = destRow;
-            previousHopCol = destCol;
+            invertCoordinates(move.first.first, move.first.second, move.second.first, move.second.second);
         }
     }
 
-    // invert the board back to return to original board orientation
-    if(isBlack)
+    // store all the available moves for a current color
+    std::vector<std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > > allAvailableMoves = getAvailableMovesForColor(isBlack);
+    
+    // move the piece if user-provided move matches any move in all available moves
+    for (std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > availableMove : allAvailableMoves)
     {
-        invertBoard();
+        if (availableMove == providedMove)
+        {
+            for (std::pair<std::pair<int, int>, std::pair<int, int> > move : availableMove)
+            {
+                this->movePiece(move);
+            }
+            
+            isBlack ? this->invertBoard() : void();
+            
+            turn++;
+            
+            return;
+        }
     }
     
-    // proceed to next turn
-    turn++;
+    isBlack ? this->invertBoard() : void();
+    
+    std::cout << "The move you provided is not valid, please try again." <<std::endl;
+        return;
+
 }
 
-// checks the hop move
-bool Board::captureMoveCheck(int originRow, int originCol, int destRow, int destCol, int& turn)
+// get all the available moves based on current board state for a certain piece color
+std::vector<std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > > Board::getAvailableMovesForColor(bool isBlack)
 {
-    // piece to be checked
-    Piece* chosenPiece = board[originRow][originCol];
+    // stores vectors that contain both single moves and multiple hops
+    std::vector<std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > > availableMoves;
     
-    // check by overloaded checker class member function
-    if (!chosenPiece->isValidMove(destRow, destCol))
+    // iterate through the board and check all possible moves for a piece
+    for (int row = 0; row < 8; row++)
     {
-        std::cout << "Wrong move for a checker, detected in checker member function" << std::endl;
-        return false;
+        for (int col = 0; col < 8; col++)
+        {
+            if (board[row][col] != nullptr && (board[row][col]->isBlackCheck() == isBlack))
+            {
+                // stores the sequence for hopping
+                std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > hopSequence;
+                
+                // check if kingchecker
+                bool isKingChecker = typeid(*board[row][col]) == typeid(KingChecker);
+                
+                // check if hops or capture moves are available
+                findHopPaths(row, col, isBlack, hopSequence, availableMoves, isKingChecker);
+                
+                // stores single row move
+                std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > singleRowMove;
+                
+                // stores possible directions of movement
+                std::vector<std::pair<int, int>> directions = {{1, 1}, {1, -1}, {-1, -1}, {-1, 1}};
+                
+                // can move left top and right top only if regular checker
+                int directionTypes = isKingChecker ? 4 : 2;
+                
+                // check a single row move for each direction
+                for (int i = 0; i < directionTypes; i++) 
+                {
+                    if(row + directions[i].first < 8 && row + directions[i].first >= 0 && col + directions[i].second < 8 && col + directions[i].second >= 0
+                        && board[row + directions[i].first][col + directions[i].second] == nullptr)
+                    {
+                        singleRowMove.push_back({{row, col}, {row + directions[i].first, col + directions[i].second}});
+                        
+                        availableMoves.push_back(singleRowMove);
+                        singleRowMove.clear();
+                    }
+                }
+            }
+        }
     }
-        
-    // check if user tries to do a single move after a hop
-    if (destRow == originRow + 1)
-    {
-        std::cout << "Don't attempt single moves in a hop sequence, only hop move was made.\n";
-        turn++;
-        return false;
-    }
-    
-    // check if it is going backwards. (King Movement)
-    if (destRow == originRow - 1)
-    {
-        std::cout << "Don't attempt single moves in a hop sequence, only hop was made. \n";
-        turn++; 
-        return false; 
-    }
-    
-    // check if user tries to jump over empty square
-    if (board[(destRow + originRow) / 2][(destCol + originCol) / 2] == nullptr)
-    {
-        std::cout << "Don't try to hop over nothing\n";
-        return false;
-    }
-        
-    // check if user tries to capture a same color piece
-    if (originRow + 2 == destRow && board[(destRow + originRow) / 2][(destCol + originCol) / 2]->isBlackCheck() == chosenPiece->isBlackCheck())
-    {
-        std::cout << "Can't capture same colors" << std::endl; 
-        return false;
-    }
-    
-    return true;
+
+    return availableMoves;
 }
 
-// inverts the board so that red and black moves can be handled the same way
+// service methods that provides hop moves to getAvailableMovesForColor method
+void Board::findHopPaths(int row, int col, bool isBlack, std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > sequence,
+                                    std::vector<  std::vector<std::pair<  std::pair<int, int>, std::pair<int, int> > > > &allSequences, bool isKingChecker)
+{ 
+    // move validity checks
+    bool topRightHopIsValid = row + 2 < 8 && col - 2 >= 0 && (board[row + 1][col - 1] != nullptr && board[row + 1][col - 1]->isBlackCheck() != isBlack) && board[row + 2][col - 2] == nullptr;
+    bool topLeftHopIsValid = row + 2 < 8 && col + 2 < 8 && (board[row + 1][col + 1] != nullptr && board[row + 1][col + 1]->isBlackCheck() != isBlack) && board[row + 2][col + 2] == nullptr;
+    bool bottomRightHopIsValid = false;
+    bool bottomLeftHopIsValid = false;
+    
+    // account for backhopping
+    if (isKingChecker)
+    {
+        bool backToTopRight = false;
+        bool backToTopLeft = false;
+        bool backToBottomRight = false;
+        bool backToBottomLeft = false;
+        
+        // ban returning options, otherwise will lead to circular infinite loops from the path
+        if (!sequence.empty())
+        {
+            std::pair<int, int> previousLocation = sequence.back().first;
+            
+            backToTopRight = (previousLocation.first == row + 2) && (previousLocation.second == col - 2);
+            backToTopLeft = (previousLocation.first == row + 2) && (previousLocation.second == col + 2);
+            
+            backToBottomRight = (previousLocation.first == row - 2) && (previousLocation.second == col - 2);
+            backToBottomLeft = (previousLocation.first == row - 2) && (previousLocation.second == col + 2);
+        }
+        
+        topRightHopIsValid = topRightHopIsValid && !backToTopRight;
+                    
+        topLeftHopIsValid = topLeftHopIsValid && !backToTopLeft;
+        
+        bottomRightHopIsValid = row - 2 >= 0 && col - 2 >= 0 && (board[row - 1][col - 1] != nullptr && board[row - 1][col - 1]->isBlackCheck() != isBlack) 
+                    && board[row - 2][col - 2] == nullptr && !backToBottomRight;
+                    
+        bottomLeftHopIsValid = row - 2 >= 0 && col + 2 < 8 && (board[row - 1][col + 1] != nullptr && board[row - 1][col + 1]->isBlackCheck() != isBlack) 
+                    && board[row - 2][col + 2] == nullptr && !backToBottomLeft;
+    }
+    
+    // when reached the dead end, add the traced path to available sequences 
+    if (sequence.size() > 0 && !topLeftHopIsValid && !topRightHopIsValid && !bottomLeftHopIsValid && !bottomRightHopIsValid)
+    {
+        allSequences.push_back(sequence);
+        return;
+    }
+    
+    // possible piece moves relative to current position
+    std::vector<std::pair<int, int > > hopVectors = {{2, -2}, {2, 2}, {-2, 2}, {-2, -2}};
+    
+    // account for backwards movement of king checker
+    int vectorsToCheck = isKingChecker ? 4 : 2;
+    
+    std::vector<bool> hopValidity = {topRightHopIsValid, topLeftHopIsValid, bottomLeftHopIsValid, bottomRightHopIsValid};
+    
+    // add current hop to hop sequence path
+    for (int i = 0; i < vectorsToCheck; i++)
+    {
+        if (hopValidity[i] == true)
+        {
+            sequence.push_back({{row,col},{row + hopVectors[i].first, col + hopVectors[i].second}});
+            findHopPaths(row + hopVectors[i].first, col + hopVectors[i].second, isBlack, sequence, allSequences, isKingChecker);
+            sequence.pop_back();
+        }
+    }
+}
+
+// move the piece and updates the board 
+void Board::movePiece(std::pair<std::pair<int, int>, std::pair<int, int> >  move)
+{
+    int originRow = move.first.first;
+    int originCol = move.first.second; 
+    int destRow = move.second.first;
+    int destCol = move.second.second;
+    
+    // delete the captured piece
+    if (originRow + 2 == destRow || originRow - 2 == destRow)
+    {
+        delete board[(originRow + destRow) / 2][(originCol + destCol) / 2];
+        board[(originRow + destRow) / 2][(originCol + destCol) / 2] = nullptr;
+    }
+    
+    // reassign the pointer
+    board[destRow][destCol] = board[originRow][originCol];
+    board[originRow][originCol] = nullptr;
+    
+    // cleanup the memory after the old location
+    board[destRow][destCol]->setOriginCol(destCol);
+    board[destRow][destCol]->setOriginRow(destRow);
+    
+    checkPromotion(destRow,destCol);
+}
+
+// clear the heap memory, occupied by the board
+void Board::cleanupBoardMemory()
+{
+    for (int row = 0; row < 8; row++)
+    {
+        for (int column = 0; column < 8; column++)
+        {
+            if (board[row][column] != nullptr)
+            {
+                delete board[row][column];
+                board[row][column] = nullptr;
+            }
+        }
+    }
+}
+
+// inverts the coordinates so that red and black moves can be handled in the same way
+void invertCoordinates(int& originRow, int& originCol, int& destRow, int& destCol) {
+    destRow = 7 - destRow;
+    destCol = 7 - destCol;
+    originRow = 7 - originRow;
+    originCol = 7 - originCol;
+}
+
+// inverts the board so that red and black pieces can be handled the same way
 void Board::invertBoard()
 {
     for (int row = 0; row < 4; row++)
@@ -284,43 +311,42 @@ void Board::invertBoard()
 
 // display the default style of the board in terminal
 void Board::display() const {
-            for (int y = 0; y < 8; y++)
+    for (int y = 0; y < 8; y++)
+    {
+        std::cout << y + 1 << " | ";
+        for (int x = 0; x < 8; x++)
+        {
+            if (board[y][x] == nullptr)
             {
-                std::cout << y + 1 << " | ";
-                for (int x = 0; x < 8; x++)
-                {
-                    if (board[y][x] == nullptr)
-                    {
-                        std::cout << ". ";
-                    }
-                    //if the piece is black
-                    else if (board[y][x]->isBlackCheck())
-                    {
-                        if(typeid(*board[y][x]) == typeid(KingChecker)) {
-                            std::cout << "B ";
-                        }else {
-                            std::cout << "b ";
-                        }
-                    }
-                    //if the piece is red
-                    else if (!board[y][x]->isBlackCheck())
-                    {
-                        if(typeid(*board[y][x]) == typeid(KingChecker)) {
-                            std::cout << "R ";
-                        }else {
-                            std::cout << "r ";
-                        }
-                    }
-                }
-                std::cout << std::endl;
+                std::cout << ". ";
             }
-            std::cout << "--+-----------------" << std::endl;
-            std::cout << "  | a b c d e f g h" << std::endl;
+            //if the piece is black
+            else if (board[y][x]->isBlackCheck())
+            {
+                if(typeid(*board[y][x]) == typeid(KingChecker)) {
+                    std::cout << "B ";
+                }else {
+                    std::cout << "b ";
+                }
+            }
+            //if the piece is red
+            else if (!board[y][x]->isBlackCheck())
+            {
+                if(typeid(*board[y][x]) == typeid(KingChecker)) {
+                    std::cout << "R ";
+                }else {
+                    std::cout << "r ";
+                }
+            }
         }
+        std::cout << std::endl;
+    }
+    std::cout << "--+-----------------" << std::endl;
+    std::cout << "  | a b c d e f g h" << std::endl;
+    }
          
-        
-// display the board in color in terminal
 /*
+// display the board in color in terminal
 void Board::display() const
 {
     ///allows for colour printout in the terminal
@@ -360,70 +386,6 @@ void Board::display() const
     std::cout << "  | a b c d e f g h" << std::endl;
 }*/
 
-// a coolection of user input error checks
-bool Board::checkForError(int originRow, int originCol, int destRow, int destCol, const int& turn, const Piece* chosenPiece) 
-{
-    // origin location outside of board
-    if (originRow > 7 || originRow < 0 || originCol > 7 || originCol < 0 )
-    {
-        std::cout << "The origin location is outside the board boundary, choose a valid origin." << std::endl;
-        return true;
-    }
-
-    // destination location outside board
-    else if (destRow > 7 || destRow < 0 || destCol > 7 || destCol < 0)
-    {
-        std::cout << "The chosen destination is outside the board boundary, choose a valid destination." << std::endl;
-        return true;
-    }
-
-    //origin and destination are the same
-    else if (destRow == originRow && destCol == originCol)
-    {
-        std::cout << "You provided the same coordinates, they have to be different." << std::endl;
-        return true;
-    }
-    
-    // the destination location has a piece at it already
-    if(board[destRow][destCol] != nullptr)
-    {
-        std::cout << "This destination is already occupied. Try another destination." << std::endl;
-        return true;
-    }
-    
-    // chosen an empty square
-    if(chosenPiece == nullptr)
-    {
-        std::cout << "You have chosen an empty square." << std::endl;
-        return true;
-    }
-    
-    // attempting to move black piece on red's turn
-    if (turn % 2 != 0 && chosenPiece->isBlackCheck())
-    {
-        std::cout << "Not your turn! Move red pieces now." << std::endl;
-        return true;
-    }
-
-    // attempting to move red piece on black's turn
-    else if (turn % 2 == 0 && !chosenPiece->isBlackCheck())
-    {
-        std::cout << "Not your turn! Move black pieces now." << std::endl;
-        return true;
-    }
-    
-    return false;
-}
-
-// inverts the coordinates so that red and black moves can be handled in the same way
-void invertCoordinates(int& originRow, int& originCol, int& destRow, int& destCol) {
-    destRow = 7 - destRow;
-    destCol = 7 - destCol;
-    originRow = 7 - originRow;
-    originCol = 7 - originCol;
-}
-
-
 // parses the inputted string into 2 pairs of ints. the first pair is the initial row & col, second is the destination row & col
 std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > parseMove(const std::string& moves)
 {
@@ -440,7 +402,6 @@ std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > parseMove(con
            rawMoves.push_back(move);
            
         }
-
         for (std::string stringMove: rawMoves) 
         {
             if (stringMove.size() != 5 || stringMove[2] != '>') 
@@ -461,6 +422,7 @@ std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > parseMove(con
      return parsedMoves;
 }
 
+// promote a checker to king checker
 void Board::checkPromotion(int originRow, int originCol)
 {
     Piece* piece = board[originRow][originCol];
@@ -484,28 +446,60 @@ void Board::checkPromotion(int originRow, int originCol)
         // replacing regular checker with kingChecker
         board[originRow][originCol] = new KingChecker(colourKeeper,statusKeeper, originRow, originCol);
         
-        std::cout << "Checker has been promoted to KingChecker" << std::endl;
+        //std::cout << "Checker has been promoted to KingChecker" << std::endl;
     }
 }
 
+// get the difference between black and red pieces
 int Board::getBlackMinusRed()
 {
     int balance = 0;
-    
+
     for (int row = 0; row < 8; row++)
     {
         for (int column = 0; column < 8; column++)
         {
-            if (board[row][column]->isBlackCheck())
+            if (board[row][column] != nullptr && board[row][column]->isBlackCheck())
             {
                 balance += 1;
             }
-            else if (board[row][column]->isBlackCheck())
+            else if (board[row][column] != nullptr && !board[row][column]->isBlackCheck())
             {
                 balance -= 1;
             }
         }
     }
-    
     return balance;
+}
+
+// service method, deletes the single row moves from all available moves, if capture moves are available
+// this makes capture moves unavoidable
+void enforceCaptureMove(std::vector<std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > > &allMoves)
+{
+    bool captureMovePresent = false;
+    std::vector<std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > > newMoves;
+    
+    // if capturemove is found in population of moves, raise the flag that capture moves should be enforced
+    for (std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > move : allMoves)
+    {
+        if (move.size() > 1 || move[0].first.first + 2 == move[0].second.first || move[0].first.first - 2 == move[0].second.first)
+        {
+            captureMovePresent = true;
+            break;
+        }
+    }
+    
+    // if capture move flag is raised
+    if (captureMovePresent)
+    {
+        // select only the capture moves as available moves, even though single rows are also possible
+        for (std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > move : allMoves)
+        {   
+            if (move.size() > 1 || move[0].first.first + 2 == move[0].second.first || move[0].first.first - 2 == move[0].second.first)
+            {
+                newMoves.push_back(move);
+            }
+        }
+        allMoves = newMoves;
+    }
 }

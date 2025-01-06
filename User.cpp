@@ -1,30 +1,35 @@
 #include "User.h"
+#include "Board.h"
+#include <iostream>
 
-// user class makes it easier to store and process stats
-User::User(std::string newName)
-{
-    name = newName;
-}
-
-// constructor
+// default constructor just in case
 User::User()
+{}
+
+// virtualized method that gets a move path from a user
+std::string User::getMove(Board originalBoard)
 {
-    name = "";
+    return "Default string as user input. To be overridden!";
 }
 
-// constructor
+// setters and getter sfor all the datamembers
+int User::getCount()
+{
+    userCount++;
+    return userCount;
+}
+
 std::string User::getName()
 {
     return name;
 }
 
-// constructor
 void User::setName(std::string newName)
 {
     name = newName;
 }
 
-// setters and getter for all the datamembers
+
 int User::getWins()
 {
     return wins;

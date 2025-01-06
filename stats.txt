@@ -1,4 +1,4 @@
-Adam 6 1
+Adam 6 2
 Brian 2 4
 Cynthia 0 1
 Elon 6 2
@@ -11,13 +11,6 @@ Brad 0 1
 Olivia 1 0
 Spenny 0 1
 Tim 2 0
-Dana 0 2
-1 0 0
-1 0 0
-1 0 0
-1 0 0
-1 0 0
-AI 1 0
-sdg 0 1
- 1 0
- 0 1
+Alberto 1 1
+sadg 1 0
+AI player 1 0

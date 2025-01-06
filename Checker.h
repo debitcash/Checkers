@@ -1,14 +1,12 @@
-// checker header file
 #ifndef CHECKER_H
 #define CHECKER_H
 
 #include "Piece.h"
 
-// define class checker
+// Checker class specifies behaviors for a checker
 class Checker : public Piece {
-
 private:
-bool isPromoted;
+    bool isPromoted;
 
 public:
     // default constructor

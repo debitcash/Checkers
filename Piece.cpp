@@ -1,7 +1,5 @@
-#include "Piece.h"
 #include <iostream>
-
-// class, which holds the implementation for all the code about the piece class. 
+#include "Piece.h"
 
 // parameterized constructor
 Piece::Piece(bool newColour, bool newStatus, int row, int col): isBlack(newColour), isPieceCaptured(newStatus), originRow(row), originCol(col){};

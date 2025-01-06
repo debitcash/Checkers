@@ -15,6 +15,7 @@ Checker::Checker() : Piece() {};
 // parameterized constructor. Calls parent class's constructor (piece)
 Checker::Checker(bool newColour, bool newStatus, int newRow, int newCol, bool newPromotion) : Piece(newColour, newStatus, newRow, newCol), isPromoted(newPromotion) {}
 
+// !!! this method was used in Version 1 of the program. not used in Version2, kept it just in case
 bool Checker::isValidMove(int destRow, int destCol) {
 
     bool validMove;

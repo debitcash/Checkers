@@ -3,13 +3,9 @@
 
 #include "Piece.h"
 
-// holds kingChecker class declarations
-
-class KingChecker : public Piece
-{
-
-    public:
-    
+// KingChecker class specifies details for king pieces
+class KingChecker : public Piece{
+public:
     // constructor
     KingChecker();
     
@@ -21,7 +17,6 @@ class KingChecker : public Piece
 
     // destructor
     ~KingChecker();
-
 };
 
 #endif

@@ -5,19 +5,22 @@
 #include "User.h"
 
 
-// header for Game class that is responsible for game management
+// Game class responsible for game management
 class Game {
-
 private:
     // stores current turn
     int turn;
     Board board;
+    bool giveUp = false;
 
 public:
     Game();
 
     // starts new game
+    void play(User* ptrUser1, User* ptrUser2);
+    
     void pvpPlay();
+    
     void aiPlay();
 
     // ends game
