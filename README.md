@@ -3,8 +3,9 @@
 Game Options:
 - Player vs Player
 - Player vs AI
+- Network play (tested with EC2 instances)
   
-The game keeps track of and displays statistics for each user. The AI is implemented using the Minimax algorithm with Alpha-Beta pruning.
+The game tracks and displays user statistics. The AI uses the Minimax algorithm with Alpha-Beta pruning to determine moves. Networking is implemented using the sys/socket API for communication between clients and the server.
 
 To enable color in the terminal (available only on Windows), uncomment the second and 30th lines in Main.cpp.
 
