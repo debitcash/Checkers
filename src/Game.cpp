@@ -1,7 +1,7 @@
 #include <fstream>
 #include "Game.h"
 #include "User.h"
-#include "AiUser.cpp"
+#include "AiUser.h"
 
 // file that holds all the logic relateble to Game class
 

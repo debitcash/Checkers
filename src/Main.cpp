@@ -4,25 +4,20 @@
 #include <sstream>
 #include <typeinfo>
 
-/*
-#include "Board.h"
+
+#include "Game.h"
+
 #include "User.h"
+#include "RegularUser.h"
+#include "NetworkUser.h"
+#include "AiUser.h"
+#include "Server.h"
+#include "Client.h"
+
+#include "Board.h"
 #include "Checker.h"
 #include "Piece.h"
-#include "Game.h"
-#include "RegularUser.h"
-*/
-
-#include "User.cpp"
-#include "Board.cpp"
-#include "Checker.cpp"
-#include "Piece.cpp"
-#include "KingChecker.cpp"
-#include "RegularUser.cpp"
-#include "NetworkUser.cpp"
-#include "Server.cpp"
-#include "Client.cpp"
-#include "Game.cpp"
+#include "KingChecker.h"
 
 int User::userCount = 0;
 

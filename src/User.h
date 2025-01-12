@@ -14,6 +14,7 @@ private:
 public:
     
     User();
+    ~User();
     
     // gets a move path from a user
     virtual std::string getMove(Board originalBoard);
@@ -32,6 +33,8 @@ public:
     void setLosses(int);
     
     void setName(std::string newName);
+    
+    void enforceCaptureMove(std::vector<std::vector<std::pair<std::pair<int, int>, std::pair<int, int> > > > &allMoves);
 };
 
 #endif //USER_H

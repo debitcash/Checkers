@@ -7,7 +7,7 @@ Game Options:
   
 The game tracks and displays user statistics. The AI uses the Minimax algorithm with Alpha-Beta pruning to determine moves. Networking is implemented using the sys/socket API for communication between clients and the server.
 
-To enable color in the terminal (available only on Windows), uncomment the second and 30th lines in Main.cpp.
+To enable color in the terminal (available only on Windows), uncomment the second and 28th lines in Main.cpp.
 
 UI:
 ---

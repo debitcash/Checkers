@@ -27,13 +27,4 @@ public:
     void checkConnection();
 };
 
-std::string NetworkUser::serverName = "";
-std::string NetworkUser::clientName = "";
-//std::string NetworkUser::lastProvidedMove = "";
-
-int NetworkUser::serverSocket = 0;
-int NetworkUser::clientSocket = 0;
-
-sockaddr_in NetworkUser::serverAddress = {};
-
 #endif //NETWORKUSER_H
