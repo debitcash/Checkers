@@ -61,6 +61,9 @@ public:
     
     // get the difference between black and red pieces
     int getBlackMinusRed();
+    
+    // get the board array, used for tests only
+    Piece* (*getBoard())[8];
 };
 
 #endif //BOARD_H

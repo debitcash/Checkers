@@ -471,3 +471,8 @@ int Board::getBlackMinusRed()
     }
     return balance;
 }
+
+// get the board array from the Borad object, used in test cases
+Piece* (*Board::getBoard())[8] {
+    return board;
+}

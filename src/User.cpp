@@ -2,6 +2,8 @@
 #include "Board.h"
 #include <iostream>
 
+int User::userCount = 0;
+
 // default constructor just in case
 User::User()
 {}
@@ -28,7 +30,6 @@ void User::setName(std::string newName)
 {
     name = newName;
 }
-
 
 int User::getWins()
 {

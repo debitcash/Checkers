@@ -19,7 +19,7 @@
 #include "Piece.h"
 #include "KingChecker.h"
 
-int User::userCount = 0;
+
 
 // file that contaings control flow for main  logic
 int main(){

@@ -11,3 +11,7 @@ set_target_properties(
 	CheckersExecutable PROPERTIES
 	CXX_STANDARD 11
 	CXX_STANDARD_REQUIRED ON)
+
+enable_testing()
+
+add_subdirectory(tests)
